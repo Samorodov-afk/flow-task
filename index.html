@@ -940,14 +940,14 @@
     <!-- Скрипты -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ru.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.30.0/index.min.js"></script>
     
     <!-- Модули (новый код) - загружаем первым -->
-    <script type="module" src="js/app.js"></script>
+    <script type="module" src="./js/app.js"></script>
     
     <!-- Старый script.js для обратной совместимости (пока не все функции перенесены) -->
     <!-- Загружаем после модулей, чтобы новые функции переопределили старые -->
-    <script src="script.js"></script>
+    <!-- Добавляем defer чтобы скрипт выполнился после загрузки DOM и модулей -->
+    <script defer src="./script.js"></script>
     <!-- Fallback для старых браузеров -->
     <script nomodule>
         alert('Ваш браузер не поддерживает модули ES6. Пожалуйста, обновите браузер.');

@@ -17,7 +17,8 @@ window.t = function(key) {
     return translations[lang]?.[key] || translations['ru'][key] || key;
 };
 
-// Экспортируем функции для использования в HTML
+// Экспортируем функции для использования в HTML (синхронно, до DOMContentLoaded)
+// Это гарантирует, что функции будут доступны когда script.js попытается их использовать
 window.stateManager = stateManager;
 window.addTask = addTask;
 window.updateTask = updateTask;
@@ -44,6 +45,9 @@ window.logoutUser = logoutUser;
 window.changePassword = changePassword;
 window.getCurrentUser = getCurrentUser;
 window.setCurrentUser = setCurrentUser;
+
+// Флаг что модули загружены
+window.__FLOW_MODULES_LOADED__ = true;
 
 // Инициализация приложения
 document.addEventListener('DOMContentLoaded', () => {

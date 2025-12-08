@@ -5247,37 +5247,67 @@ function handleChangePassword() {
     showNotification(t('passwordChanged'), 'success');
 }
 
+// Функция ожидания загрузки модулей
+function waitForModules(callback, maxWait = 5000) {
+    const startTime = Date.now();
+    const checkInterval = 100;
+    
+    function check() {
+        if (window.__FLOW_MODULES_LOADED__ || Date.now() - startTime > maxWait) {
+            callback();
+        } else {
+            setTimeout(check, checkInterval);
+        }
+    }
+    
+    check();
+}
+
 // Запуск приложения
 document.addEventListener('DOMContentLoaded', function() {
     console.log('=== DOMContentLoaded: script.js ===');
-    // Всегда инициализируем, но синхронизируем состояние с новыми модулями
-    try {
-        // Если новый модульный код уже запустился, синхронизируем состояние
-        if (window.__FLOW_INIT__ && window.stateManager) {
-            console.log('Syncing state from stateManager...');
-            // Синхронизируем состояние из нового stateManager в старый state
-            const user = window.stateManager.get('user');
-            console.log('User from stateManager:', user);
-            if (user && !state.user) {
-                state.user = user;
-                loadUserData();
-                console.log('State synced, user loaded');
+    
+    // Ждем загрузки модулей перед выполнением
+    waitForModules(() => {
+        // Всегда инициализируем, но синхронизируем состояние с новыми модулями
+        try {
+            // Если новый модульный код уже запустился, синхронизируем состояние
+            if (window.__FLOW_INIT__ && window.stateManager) {
+                console.log('Syncing state from stateManager...');
+                // Синхронизируем состояние из нового stateManager в старый state
+                const user = window.stateManager.get('user');
+                console.log('User from stateManager:', user);
+                if (user && !state.user) {
+                    state.user = user;
+                    loadUserData();
+                    console.log('State synced, user loaded');
+                }
+            }
+            
+            // Экспортируем функции в window ДО вызова initApp (только если они еще не экспортированы)
+            if (typeof window.initApp !== 'function') {
+                window.initApp = initApp;
+            }
+            if (typeof window.setupEventListeners !== 'function') {
+                window.setupEventListeners = setupEventListeners;
+            }
+            if (typeof window.initAppAfterAuth !== 'function') {
+                window.initAppAfterAuth = initAppAfterAuth;
+            }
+            console.log('Functions exported to window');
+            
+            // Всегда вызываем initApp для инициализации обработчиков событий
+            console.log('Calling initApp...');
+            initApp();
+            updateProfileButton();
+            console.log('initApp completed');
+        } catch (error) {
+            console.error('Ошибка при запуске приложения:', error);
+            if (typeof showNotification === 'function') {
+                showNotification(t('appLoadError'), 'error');
+            } else {
+                alert('Ошибка при запуске приложения: ' + error.message);
             }
         }
-        
-        // Экспортируем функции в window ДО вызова initApp
-        window.initApp = initApp;
-        window.setupEventListeners = setupEventListeners;
-        window.initAppAfterAuth = initAppAfterAuth;
-        console.log('Functions exported to window');
-        
-        // Всегда вызываем initApp для инициализации обработчиков событий
-        console.log('Calling initApp...');
-        initApp();
-        updateProfileButton();
-        console.log('initApp completed');
-    } catch (error) {
-        console.error('Ошибка при запуске приложения:', error);
-        showNotification(t('appLoadError'), 'error');
-    }
+    });
 });
