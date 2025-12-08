@@ -5214,12 +5214,19 @@ function handleChangePassword() {
 
 // Запуск приложения
 document.addEventListener('DOMContentLoaded', function() {
-    if (window.__FLOW_INIT__) {
-        console.log('Legacy script.js init skipped (new modules active)');
-        return;
-    }
-    window.__FLOW_LEGACY__ = true;
+    // Всегда инициализируем, но синхронизируем состояние с новыми модулями
     try {
+        // Если новый модульный код уже запустился, синхронизируем состояние
+        if (window.__FLOW_INIT__ && window.stateManager) {
+            // Синхронизируем состояние из нового stateManager в старый state
+            const user = window.stateManager.get('user');
+            if (user && !state.user) {
+                state.user = user;
+                loadUserData();
+            }
+        }
+        
+        // Всегда вызываем initApp для инициализации обработчиков событий
         initApp();
         updateProfileButton();
     } catch (error) {

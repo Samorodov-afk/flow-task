@@ -58,9 +58,14 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const { request } = event;
 
-  // Пропускаем запросы к внешним ресурсам (CDN) и не-GET
+  // Пропускаем запросы к внешним ресурсам (CDN), не-GET, и неподдерживаемые схемы
   const isExternal = request.url.startsWith('http') && !request.url.startsWith(self.location.origin);
-  if (isExternal || request.method !== 'GET') {
+  const isUnsupportedScheme = request.url.startsWith('chrome-extension:') || 
+                                request.url.startsWith('moz-extension:') ||
+                                request.url.startsWith('safari-extension:') ||
+                                request.url.startsWith('edge:');
+  
+  if (isExternal || request.method !== 'GET' || isUnsupportedScheme) {
     return;
   }
 
@@ -70,8 +75,17 @@ self.addEventListener('fetch', (event) => {
 
     const networkFetch = fetch(request)
       .then(response => {
-        if (response && response.status === 200 && response.type === 'basic') {
-          cache.put(request, response.clone());
+        // Проверяем схему перед кэшированием
+        const url = new URL(request.url);
+        const canCache = url.protocol === 'http:' || url.protocol === 'https:';
+        
+        if (response && response.status === 200 && response.type === 'basic' && canCache) {
+          try {
+            cache.put(request, response.clone());
+          } catch (err) {
+            // Игнорируем ошибки кэширования для неподдерживаемых схем
+            console.warn('Cache put failed:', err);
+          }
         }
         return response;
       })

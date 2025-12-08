@@ -47,7 +47,7 @@ window.setCurrentUser = setCurrentUser;
 
 // Инициализация приложения
 document.addEventListener('DOMContentLoaded', () => {
-    if (window.__FLOW_INIT__) return; // защита от двойного запуска (legacy script.js)
+    // Не блокируем старый script.js, пусть оба работают вместе
     window.__FLOW_INIT__ = true;
 
     try {
@@ -249,20 +249,13 @@ async function handleLandingLogin() {
             setCurrentUser(result.user);
             stateManager.set('user', result.user);
             
+            // Синхронизируем с legacy state
+            if (typeof window.state === 'object') {
+                window.state.user = result.user;
+            }
+            
             // Загружаем данные нового пользователя
             stateManager.loadUserData();
-        // Сразу показываем данные без перезагрузки
-        initAppAfterAuth();
-        renderAll(true);
-        
-        // Костыль: бесшовно перезагружаем страницу, чтобы старый script.js точно подхватил данные
-        setTimeout(() => {
-            try {
-                window.location.reload();
-            } catch (e) {
-                console.error('Reload error after login', e);
-            }
-        }, 100);
             
             // Очищаем формы
             emailInput.value = '';
@@ -273,9 +266,19 @@ async function handleLandingLogin() {
             
             // Переключаем на приложение
             checkAuthAndShowContent(true);
+            
+            // Инициализируем приложение после небольшой задержки для рендеринга
             setTimeout(() => {
                 initApp();
-            }, 300);
+                // Вызываем старую функцию initAppAfterAuth если она есть
+                if (typeof window.initAppAfterAuth === 'function') {
+                    const oldInit = window.initAppAfterAuth;
+                    // Проверяем что это не наша функция
+                    if (oldInit.toString().includes('setupEventListeners')) {
+                        oldInit();
+                    }
+                }
+            }, 100);
         } else {
             showNotification(result.errors.join(', ') || window.t('wrongCredentials'), 'error');
         }
@@ -449,12 +452,34 @@ function initAppAfterAuth() {
             stateManager.set('categories', categories);
         }
         
+        // Синхронизируем с legacy state для совместимости со старым script.js
+        if (typeof window.state === 'object') {
+            window.state.user = stateManager.get('user');
+            window.state.tasks = stateManager.get('tasks') || [];
+            window.state.categories = stateManager.get('categories') || [];
+            window.state.quickTasks = stateManager.get('quickTasks') || [];
+        }
+        
         // Рендерим все
         renderAll();
         
-        // Инициализируем обработчики событий
+        // Инициализируем обработчики событий из модульного кода
         initEventListeners();
         applyAccessibilityAttributes();
+        
+        // Вызываем старую функцию initAppAfterAuth из script.js для полной инициализации
+        if (typeof window.initAppAfterAuth === 'function' && window.initAppAfterAuth !== initAppAfterAuth) {
+            // Сохраняем ссылку на старую функцию
+            const oldInitAppAfterAuth = window.initAppAfterAuth;
+            // Вызываем её для инициализации всех обработчиков
+            setTimeout(() => {
+                try {
+                    oldInitAppAfterAuth();
+                } catch (e) {
+                    console.warn('Old initAppAfterAuth error:', e);
+                }
+            }, 100);
+        }
         
         // Применяем тему
         applyTheme(stateManager.get('theme'));

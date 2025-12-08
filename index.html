@@ -21,21 +21,30 @@
         (function() {
             try {
                 const savedTheme = localStorage.getItem('flowTheme') || 'dark';
-                const body = document.body;
-                
-                if (savedTheme === 'auto') {
-                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                    if (prefersDark) {
-                        body.className = 'dark-theme';
+                // Проверяем наличие body перед установкой класса
+                if (document.body) {
+                    if (savedTheme === 'auto') {
+                        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                        document.body.className = prefersDark ? 'dark-theme' : 'light-theme';
                     } else {
-                        body.className = 'light-theme';
+                        document.body.className = savedTheme + '-theme';
                     }
                 } else {
-                    body.className = savedTheme + '-theme';
+                    // Если body еще не загружен, применяем через DOMContentLoaded
+                    document.addEventListener('DOMContentLoaded', function() {
+                        if (savedTheme === 'auto') {
+                            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                            document.body.className = prefersDark ? 'dark-theme' : 'light-theme';
+                        } else {
+                            document.body.className = savedTheme + '-theme';
+                        }
+                    });
                 }
             } catch(e) {
                 // Если ошибка, оставляем дефолтную темную тему
-                document.body.className = 'dark-theme';
+                if (document.body) {
+                    document.body.className = 'dark-theme';
+                }
             }
         })();
     </script>
