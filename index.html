@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="description" content="FlowTask - Управление задачами и повышение продуктивности">
+    <meta name="theme-color" content="#7395ae">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="FlowTask">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>FlowTask</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%237395ae'/><path d='M30 50L45 65L70 35' stroke='white' stroke-width='8' stroke-linecap='round' stroke-linejoin='round' fill='none'/></svg>">
+    <script>
+        // Применяем тему ДО рендеринга контента для предотвращения моргания
+        (function() {
+            try {
+                const savedTheme = localStorage.getItem('flowTheme') || 'dark';
+                const body = document.body;
+                
+                if (savedTheme === 'auto') {
+                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    if (prefersDark) {
+                        body.className = 'dark-theme';
+                    } else {
+                        body.className = 'light-theme';
+                    }
+                } else {
+                    body.className = savedTheme + '-theme';
+                }
+            } catch(e) {
+                // Если ошибка, оставляем дефолтную темную тему
+                document.body.className = 'dark-theme';
+            }
+        })();
+    </script>
+</head>
+<body class="dark-theme">
+    <!-- Лендинг для неавторизованных пользователей -->
+    <div class="landing-page" id="landing-page">
+        <div class="landing-container">
+            <div class="landing-content">
+                <div class="landing-text">
+                    <div class="landing-header-controls">
+                        <button class="landing-language-toggle" id="landing-language-toggle" aria-label="Переключить язык">
+                            <i class="fas fa-globe"></i>
+                            <span id="landing-language-text">RU</span>
+                        </button>
+                        <button class="landing-theme-toggle" id="landing-theme-toggle" aria-label="Переключить тему">
+                            <i class="fas fa-moon" id="landing-theme-icon"></i>
+                        </button>
+                    </div>
+                    <h1 class="landing-title">
+                        <span class="gradient-text">FlowTask</span>
+                    </h1>
+                    <p class="landing-subtitle">Твой личный менеджер задач, который не забудет про дедлайн (в отличие от тебя 😉)</p>
+                    
+                    <div class="landing-features">
+                        <div class="feature-item">
+                            <i class="fas fa-fire"></i>
+                            <span>Приоритеты, которые реально работают</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Аналитика твоей продуктивности</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-bolt"></i>
+                            <span>Быстрые шаблоны для ленивых</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-moon"></i>
+                            <span>Темная тема для ночных сов</span>
+                        </div>
+                    </div>
+                    
+                    <div class="landing-description">
+                        <p>Устал от хаоса в голове? Забываешь важные дела? FlowTask — это не просто список задач, это твой персональный ассистент, который поможет навести порядок в жизни (или хотя бы попытаться).</p>
+                        <p class="landing-humor">P.S. Мы не гарантируем, что ты станешь продуктивнее, но хотя бы будешь знать, что должен был сделать 😄</p>
+                    </div>
+                </div>
+                
+                <div class="landing-auth">
+                    <div class="auth-card">
+                        <h2>Начни прямо сейчас</h2>
+                        <p class="auth-subtitle">Создай аккаунт и начни управлять задачами</p>
+                        
+                        <div class="auth-tabs-landing">
+                            <button class="auth-tab-landing active" id="landing-register-tab" data-tab="register">
+                                <i class="fas fa-user-plus"></i> Регистрация
+                            </button>
+                            <button class="auth-tab-landing" id="landing-login-tab" data-tab="login">
+                                <i class="fas fa-sign-in-alt"></i> Вход
+                            </button>
+                        </div>
+                        
+                        <!-- Форма регистрации -->
+                        <div class="auth-form-landing active" id="landing-register-form">
+                            <div class="form-group-landing">
+                                <label>Имя</label>
+                                <input type="text" id="landing-register-name" class="minimal-input" placeholder="Как к тебе обращаться?" autocomplete="name">
+                                <div class="error-message" id="landing-register-name-error"></div>
+                            </div>
+                            <div class="form-group-landing">
+                                <label>Email</label>
+                                <input type="email" id="landing-register-email" class="minimal-input" placeholder="your@email.com" autocomplete="email">
+                                <div class="error-message" id="landing-register-email-error"></div>
+                            </div>
+                            <div class="form-group-landing">
+                                <label>Пароль</label>
+                                <input type="password" id="landing-register-password" class="minimal-input" placeholder="Минимум 6 символов" autocomplete="new-password">
+                                <div class="error-message" id="landing-register-password-error"></div>
+                            </div>
+                            <div class="form-group-landing">
+                                <label>Подтвердите пароль</label>
+                                <input type="password" id="landing-register-password-confirm" class="minimal-input" placeholder="Повторите пароль" autocomplete="new-password">
+                                <div class="error-message" id="landing-register-password-confirm-error"></div>
+                            </div>
+                            <button id="landing-register-btn" class="btn-primary-landing">
+                                <i class="fas fa-rocket"></i> Поехали!
+                            </button>
+                        </div>
+                        
+                        <!-- Форма входа -->
+                        <div class="auth-form-landing" id="landing-login-form" style="display: none;">
+                            <div class="form-group-landing">
+                                <label>Email</label>
+                                <input type="email" id="landing-login-email" class="minimal-input" placeholder="your@email.com" autocomplete="email">
+                                <div class="error-message" id="landing-login-email-error"></div>
+                            </div>
+                            <div class="form-group-landing">
+                                <label>Пароль</label>
+                                <input type="password" id="landing-login-password" class="minimal-input" placeholder="Введите пароль" autocomplete="current-password">
+                                <div class="error-message" id="landing-login-password-error"></div>
+                            </div>
+                            <button id="landing-login-btn" class="btn-primary-landing">
+                                <i class="fas fa-sign-in-alt"></i> Войти
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Основное приложение (только для авторизованных) -->
+    <div class="app-container" id="app-container" style="display: none;">
+        <!-- Кнопка меню для мобильных -->
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Открыть меню">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Оверлей для мобильного меню -->
+        <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
+
+        <!-- Левое меню -->
+        <aside class="left-menu" id="left-menu">
+            <div class="left-menu-header">
+                <div class="logo">
+                    <div class="logo-text-large">
+                        <h1>FlowTask</h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-start-section">
+                <div class="section-header">
+                    <h3><i class="fas fa-bolt"></i> Быстрый старт</h3>
+                    <div class="quick-start-controls">
+                        <button class="icon-btn" id="edit-quick-tasks-btn" title="Редактировать шаблоны">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="icon-btn" id="add-quick-task-btn" title="Добавить шаблон">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="quick-tasks-list" id="quick-tasks-list">
+                    <!-- Быстрые задачи будут здесь -->
+                </div>
+                
+                <div class="add-quick-task-form" id="add-quick-task-form" style="display: none;">
+                    <div class="form-column">
+                        <input type="text" id="new-quick-task-input" placeholder="Текст быстрой задачи" class="minimal-input">
+                        <select id="new-quick-task-priority" class="minimal-select">
+                            <option value="high">Высокий</option>
+                            <option value="medium">Средний</option>
+                            <option value="low">Низкий</option>
+                        </select>
+                        <div class="form-buttons">
+                            <button id="save-quick-task-btn" class="btn-primary">
+                                Добавить
+                            </button>
+                            <button id="cancel-quick-task-btn" class="btn-secondary">
+                                Отмена
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="left-menu-footer">
+                <!-- Новая секция даты и времени -->
+                <div class="datetime-footer">
+                    <div class="datetime-time" id="footer-time"></div>
+                    <div class="datetime-date" id="footer-date"></div>
+                </div>
+                
+                <button class="settings-btn" id="open-settings-btn">
+                    <i class="fas fa-cog"></i>
+                    <span>Настройки</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Основное содержимое -->
+        <main class="main-content">
+            <!-- Верхняя панель -->
+            <header class="main-header">
+                <div class="header-left">
+                    <h2><i class="fas fa-tasks"></i> Мои задачи</h2>
+                    <select id="header-category-filter" class="minimal-select header-category-select">
+                        <option value="all">Все категории</option>
+                    </select>
+                </div>
+                
+                <div class="header-right">
+                    <!-- Новое расположение: поиск + фильтры -->
+                    <div class="header-search-filters">
+                        <div class="filters-bar">
+                            <nav class="filters-list">
+                                <button class="filter-btn active large-font" data-filter="all">
+                                    <i class="fas fa-list"></i>
+                                    <span class="filter-name">Все</span>
+                                    <span class="filter-count" id="count-all">0</span>
+                                </button>
+                                <button class="filter-btn large-font" data-filter="high">
+                                    <i class="fas fa-fire"></i>
+                                    <span class="filter-name">Высокий</span>
+                                    <span class="filter-count" id="count-high">0</span>
+                                </button>
+                                <button class="filter-btn large-font" data-filter="overdue" id="overdue-filter-btn">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <span class="filter-name">Просрочено</span>
+                                    <span class="filter-count" id="count-overdue">0</span>
+                                </button>
+                                <button class="filter-btn large-font" data-filter="archived">
+                                    <i class="fas fa-archive"></i>
+                                    <span class="filter-name">Архив</span>
+                                    <span class="filter-count" id="count-archived">0</span>
+                                </button>
+                            </nav>
+                        </div>
+                    </div>
+                    
+                    <button class="icon-btn analytics-btn" id="analytics-header-btn" title="Аналитика">
+                        <i class="fas fa-chart-pie"></i>
+                    </button>
+                    <button class="icon-btn profile-btn" id="profile-header-btn" title="Профиль">
+                        <i class="fas fa-user"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Форма добавления задачи -->
+            <section class="add-task-section">
+                <div class="task-form">
+                    <div class="form-group">
+                        <input type="text" id="task-input" placeholder="Что нужно сделать?" class="minimal-input large" autofocus>
+                        <div class="error-message" id="task-input-error"></div>
+                    </div>
+                    
+                    <div class="form-fields">
+                        <div class="form-field">
+                            <select id="task-category" class="minimal-select">
+                                <option value="general">Общие</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-field">
+                            <input type="text" id="task-deadline" placeholder="Срок" class="minimal-input" readonly>
+                        </div>
+                        
+                        <div class="priority-buttons">
+                            <button class="priority-btn low" data-priority="low">
+                                <i class="fas fa-leaf"></i> Низкий
+                            </button>
+                            <button class="priority-btn medium active" data-priority="medium">
+                                <i class="fas fa-chart-line"></i> Средний
+                            </button>
+                            <button class="priority-btn high" data-priority="high">
+                                <i class="fas fa-fire"></i> Высокий
+                            </button>
+                        </div>
+                        
+                        <button id="add-task-btn" class="btn-primary" disabled>
+                            <i class="fas fa-plus"></i> Добавить
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Список задач -->
+            <section class="tasks-section">
+                <div class="tasks-header">
+                    <h3><i class="fas fa-stream"></i> Список задач</h3>
+                    <div class="header-stats">
+                        <div class="stats-badge large-font" id="active-tasks-count">0 активных</div>
+                        <div class="compact-progress-bars" id="compact-progress-bars">
+                            <div class="compact-progress-item" data-priority="high">
+                                <i class="fas fa-fire"></i>
+                                <span class="compact-progress-count" id="compact-count-high">0</span>
+                            </div>
+                            <div class="compact-progress-item" data-priority="medium">
+                                <i class="fas fa-chart-line"></i>
+                                <span class="compact-progress-count" id="compact-count-medium">0</span>
+                            </div>
+                            <div class="compact-progress-item" data-priority="low">
+                                <i class="fas fa-leaf"></i>
+                                <span class="compact-progress-count" id="compact-count-low">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tasks-controls">
+                        <div class="search-container">
+                            <input type="text" id="search-input" placeholder="Поиск задач..." class="search-input">
+                            <i class="fas fa-search search-icon"></i>
+                        </div>
+                        <div class="sort-controls">
+                            <select id="sort-select" class="minimal-select">
+                                <option value="priority">По приоритету</option>
+                                <option value="deadline">По сроку</option>
+                                <option value="newest">Сначала новые</option>
+                                <option value="oldest">Сначала старые</option>
+                                <option value="order">По порядку</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Блок срочных задач на сегодня -->
+                <div class="urgent-tasks-section" id="urgent-tasks-section" style="display: none;">
+                    <div class="urgent-tasks-header">
+                        <h4><i class="fas fa-exclamation-circle"></i> Задачи истекают сегодня</h4>
+                    </div>
+                    <div class="urgent-tasks-container" id="urgent-tasks-container">
+                        <!-- Срочные задачи будут здесь -->
+                    </div>
+                </div>
+                
+                <div class="tasks-container" id="tasks-container">
+                    <!-- Задачи будут здесь -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Модальное окно настроек -->
+    <div class="modal-overlay" id="settings-modal" style="display: none;">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3><i class="fas fa-cog"></i> Настройки</h3>
+                <button class="icon-btn close-btn" id="close-settings-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body settings-modal-body">
+                <div class="settings-tabs">
+                    <button class="settings-tab active" data-tab="appearance">
+                        <i class="fas fa-palette"></i> Внешний вид
+                    </button>
+                    <button class="settings-tab" data-tab="categories">
+                        <i class="fas fa-folder"></i> Категории
+                    </button>
+                    <button class="settings-tab" data-tab="notifications">
+                        <i class="fas fa-bell"></i> Уведомления
+                    </button>
+                    <button class="settings-tab" data-tab="data">
+                        <i class="fas fa-database"></i> Данные
+                    </button>
+                </div>
+                
+                <div class="settings-content">
+                    <!-- Вкладка Внешний вид -->
+                    <div class="settings-tab-content active" id="appearance-tab">
+                        <div class="settings-section">
+                            <h4><i class="fas fa-adjust"></i> Тема интерфейса</h4>
+                            <div class="theme-buttons">
+                                <button class="theme-option-btn active" id="dark-theme-btn">
+                                    <i class="fas fa-moon"></i>
+                                    <span>Тёмная</span>
+                                </button>
+                                <button class="theme-option-btn" id="light-theme-btn">
+                                    <i class="fas fa-sun"></i>
+                                    <span>Светлая</span>
+                                </button>
+                                <button class="theme-option-btn" id="auto-theme-btn">
+                                    <i class="fas fa-circle-half-stroke"></i>
+                                    <span>Авто</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h4><i class="fas fa-language"></i> Язык интерфейса</h4>
+                            <div class="language-buttons">
+                                <button class="language-option-btn active" id="ru-lang-btn" data-lang="ru">
+                                    <i class="fas fa-flag"></i>
+                                    <span>Русский</span>
+                                </button>
+                                <button class="language-option-btn" id="en-lang-btn" data-lang="en">
+                                    <i class="fas fa-flag"></i>
+                                    <span>English</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Вкладка Категории -->
+                    <div class="settings-tab-content" id="categories-tab">
+                        <div class="settings-section">
+                            <h4><i class="fas fa-tags"></i> Управление категориями</h4>
+                            <div class="categories-management">
+                                <div class="categories-list-settings" id="categories-list-settings">
+                                    <!-- Категории будут здесь -->
+                                </div>
+                                <div class="add-category-form">
+                                    <input type="text" id="settings-category-name" placeholder="Название категории" class="minimal-input">
+                                    <div class="error-message" id="category-name-error"></div>
+                                    <div class="color-picker">
+                                        <span class="color-picker-label">Цвет:</span>
+                                        <div class="color-options">
+                                            <div class="color-option" style="background-color: #7395ae;" data-color="#7395ae"></div>
+                                            <div class="color-option" style="background-color: #4caf50;" data-color="#4caf50"></div>
+                                            <div class="color-option" style="background-color: #2196f3;" data-color="#2196f3"></div>
+                                            <div class="color-option" style="background-color: #ff9800;" data-color="#ff9800"></div>
+                                            <div class="color-option" style="background-color: #9c27b0;" data-color="#9c27b0"></div>
+                                            <div class="color-option" style="background-color: #f44336;" data-color="#f44336"></div>
+                                            <div class="color-option" style="background-color: #00bcd4;" data-color="#00bcd4"></div>
+                                            <div class="color-option" style="background-color: #8bc34a;" data-color="#8bc34a"></div>
+                                        </div>
+                                    </div>
+                                    <button id="settings-add-category-btn" class="btn-primary">
+                                        <i class="fas fa-plus"></i> Добавить категорию
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Вкладка Уведомления -->
+                    <div class="settings-tab-content" id="notifications-tab">
+                        <div class="settings-section">
+                            <h4><i class="fas fa-bell"></i> Настройки уведомлений</h4>
+                            <div class="notification-settings">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="notifications-enabled" checked>
+                                    <span>Включить уведомления о дедлайнах</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="notifications-before-deadline" checked>
+                                    <span>Уведомлять за день до дедлайна</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="notifications-on-deadline" checked>
+                                    <span>Уведомлять в день дедлайна</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Вкладка Данные -->
+                    <div class="settings-tab-content" id="data-tab">
+                        <div class="settings-section">
+                            <h4><i class="fas fa-file-export"></i> Экспорт данных</h4>
+                            <div class="export-section">
+                                <p class="export-description">
+                                    Скачайте все задачи в формате .txt. Данные будут сохранены в формате:<br>
+                                    <code>ДатаСоздания | Приоритет | Категория | Задача | Срок | ДатаЗавершения</code>
+                                </p>
+                                <button class="export-btn" id="export-data-btn">
+                                    <i class="fas fa-file-export"></i>
+                                    <span>Экспортировать задачи</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h4><i class="fas fa-info-circle"></i> Информация</h4>
+                            <div class="app-info">
+                                <div class="info-item">
+                                    <div class="info-icon">
+                                        <i class="fas fa-tasks"></i>
+                                    </div>
+                                    <div class="info-content">
+                                        <div class="info-value" id="settings-total-tasks">0</div>
+                                        <div class="info-label">Всего задач</div>
+                                    </div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-icon">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <div class="info-content">
+                                        <div class="info-value" id="settings-completed-tasks">0</div>
+                                        <div class="info-label">Выполнено</div>
+                                    </div>
+                                </div>
+                                <div class="info-item">
+                                    <div class="info-icon">
+                                        <i class="fas fa-folder"></i>
+                                    </div>
+                                    <div class="info-content">
+                                        <div class="info-value" id="settings-categories-count">0</div>
+                                        <div class="info-label">Категорий</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button id="save-settings-btn" class="btn-primary">Сохранить</button>
+                <button id="close-settings-modal-btn" class="btn-secondary">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно аналитики -->
+    <div class="modal-overlay" id="analytics-modal" style="display: none;">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3><i class="fas fa-chart-line"></i> Аналитика продуктивности</h3>
+                <button class="icon-btn close-btn" id="close-analytics-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body analytics-modal-body">
+                <!-- Период анализа -->
+                <div class="analytics-period-selector">
+                    <button class="period-btn active" data-period="week">Неделя</button>
+                    <button class="period-btn" data-period="month">Месяц</button>
+                    <button class="period-btn" data-period="quarter">Квартал</button>
+                </div>
+
+                <!-- Основные метрики продуктивности -->
+                <div class="analytics-hero">
+                    <div class="hero-metric">
+                        <div class="metric-icon-wrapper">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="metric-value" id="hero-efficiency">0%</div>
+                        <div class="metric-trend" id="hero-efficiency-trend"></div>
+                        <div class="metric-label">Эффективность</div>
+                    </div>
+                    <div class="hero-metric">
+                        <div class="metric-icon-wrapper">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="metric-value" id="hero-today-tasks">0</div>
+                        <div class="metric-trend" id="hero-today-tasks-trend"></div>
+                        <div class="metric-label">Сегодня</div>
+                    </div>
+                    <div class="hero-metric">
+                        <div class="metric-icon-wrapper">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <div class="metric-value" id="hero-streak">0</div>
+                        <div class="metric-trend" id="hero-streak-trend"></div>
+                        <div class="metric-label">Дней подряд</div>
+                    </div>
+                    <div class="hero-metric">
+                        <div class="metric-icon-wrapper">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <div class="metric-value" id="hero-avg-completion">0%</div>
+                        <div class="metric-trend" id="hero-avg-completion-trend"></div>
+                        <div class="metric-label">Средняя<br>выполняемость</div>
+                    </div>
+                </div>
+                
+                <!-- Диаграммы и детали -->
+                <div class="analytics-grid">
+                    <!-- Прогресс по приоритетам -->
+                    <div class="analytics-card">
+                        <div class="card-header">
+                            <h4><i class="fas fa-chart-pie"></i> Распределение по приоритетам</h4>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="priority-chart"></canvas>
+                            <div class="chart-stats">
+                                <div class="chart-stat">
+                                    <span class="stat-dot high"></span>
+                                    <span class="stat-label">Высокий: <span id="priority-high-percent">0%</span></span>
+                                </div>
+                                <div class="chart-stat">
+                                    <span class="stat-dot medium"></span>
+                                    <span class="stat-label">Средний: <span id="priority-medium-percent">0%</span></span>
+                                </div>
+                                <div class="chart-stat">
+                                    <span class="stat-dot low"></span>
+                                    <span class="stat-label">Низкий: <span id="priority-low-percent">0%</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Статистика завершения -->
+                    <div class="analytics-card">
+                        <div class="card-header">
+                            <h4><i class="fas fa-trend-up"></i> Тенденции выполнения</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="trend-stats">
+                                <div class="trend-stat">
+                                    <div class="trend-label">Вчера</div>
+                                    <div class="trend-value-wrapper">
+                                        <div class="trend-value" id="yesterday-completed">0</div>
+                                        <div class="trend-comparison" id="yesterday-comparison"></div>
+                                    </div>
+                                </div>
+                                <div class="trend-stat">
+                                    <div class="trend-label">За неделю</div>
+                                    <div class="trend-value-wrapper">
+                                        <div class="trend-value" id="week-completed">0</div>
+                                        <div class="trend-comparison" id="week-comparison"></div>
+                                    </div>
+                                </div>
+                                <div class="trend-stat">
+                                    <div class="trend-label">За месяц</div>
+                                    <div class="trend-value-wrapper">
+                                        <div class="trend-value" id="month-completed">0</div>
+                                        <div class="trend-comparison" id="month-comparison"></div>
+                                    </div>
+                                </div>
+                                <div class="trend-stat">
+                                    <div class="trend-label">Всего</div>
+                                    <div class="trend-value-wrapper">
+                                        <div class="trend-value" id="total-completed">0</div>
+                                        <div class="trend-comparison" id="total-comparison"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- График продуктивности -->
+                    <div class="analytics-card full-width">
+                        <div class="card-header">
+                            <h4><i class="fas fa-chart-bar"></i> Продуктивность</h4>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="productivity-chart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Детальная статистика -->
+                    <div class="analytics-card">
+                        <div class="card-header">
+                            <h4><i class="fas fa-clock"></i> Временные метрики</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="time-metrics">
+                                <div class="time-metric">
+                                    <div class="metric-icon">
+                                        <i class="fas fa-hourglass-half"></i>
+                                    </div>
+                                    <div class="metric-content">
+                                        <div class="metric-value" id="avg-completion-time">0</div>
+                                        <div class="metric-label">Среднее время выполнения</div>
+                                    </div>
+                                </div>
+                                <div class="time-metric">
+                                    <div class="metric-icon">
+                                        <i class="fas fa-calendar-check"></i>
+                                    </div>
+                                    <div class="metric-content">
+                                        <div class="metric-value" id="on-time-rate">0%</div>
+                                        <div class="metric-label">Выполнено в срок</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Рекомендации -->
+                    <div class="analytics-card">
+                        <div class="card-header">
+                            <h4><i class="fas fa-lightbulb"></i> Рекомендации</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="recommendations" id="recommendations">
+                                <!-- Рекомендации будут здесь -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="modal-footer">
+                <button id="close-analytics-modal-btn" class="btn-primary">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Остальные модальные окна -->
+    <div class="modal-overlay" id="confirm-modal" style="display: none;">
+        <div class="modal modal-sm">
+            <div class="modal-header">
+                <h3 id="confirm-title">Подтверждение</h3>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-message">Вы уверены?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="confirm-cancel" class="btn-secondary">Отмена</button>
+                <button id="confirm-ok" class="btn-primary">Подтвердить</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="edit-modal" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Редактировать задачу</h3>
+                <button class="icon-btn close-btn" id="close-edit-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="edit-task-input" class="minimal-input" placeholder="Текст задачи">
+                <div class="error-message" id="edit-task-input-error"></div>
+                
+                <div class="modal-fields">
+                    <select id="edit-task-category" class="minimal-select"></select>
+                    <input type="text" id="edit-task-deadline" class="minimal-input" placeholder="Срок" readonly>
+                    <div class="priority-buttons modal-priority">
+                        <button class="priority-btn low" data-priority="low">
+                            <i class="fas fa-leaf"></i> Низкий
+                        </button>
+                        <button class="priority-btn medium active" data-priority="medium">
+                            <i class="fas fa-chart-line"></i> Средний
+                        </button>
+                        <button class="priority-btn high" data-priority="high">
+                            <i class="fas fa-fire"></i> Высокий
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="task-notes-section">
+                    <label class="notes-label">
+                        <i class="fas fa-sticky-note"></i> Заметки/Комментарии
+                    </label>
+                    <textarea id="edit-task-notes" class="minimal-textarea" placeholder="Добавьте заметки к задаче..."></textarea>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button id="save-edit-btn" class="btn-primary">Сохранить</button>
+                <button id="cancel-edit-btn" class="btn-secondary">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно авторизации/регистрации -->
+    <div class="modal-overlay" id="auth-modal" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="auth-modal-title"><i class="fas fa-user"></i> Вход</h3>
+                <button class="icon-btn close-btn" id="close-auth-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" id="login-tab" data-tab="login">
+                        <i class="fas fa-sign-in-alt"></i> Вход
+                    </button>
+                    <button class="auth-tab" id="register-tab" data-tab="register">
+                        <i class="fas fa-user-plus"></i> Регистрация
+                    </button>
+                </div>
+                
+                <!-- Форма входа -->
+                <div class="auth-form active" id="login-form">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="login-email" class="minimal-input" placeholder="your@email.com" autocomplete="email">
+                        <div class="error-message" id="login-email-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Пароль</label>
+                        <input type="password" id="login-password" class="minimal-input" placeholder="Введите пароль" autocomplete="current-password">
+                        <div class="error-message" id="login-password-error"></div>
+                    </div>
+                    <button id="login-btn" class="btn-primary" style="width: 100%; margin-top: 20px;">
+                        <i class="fas fa-sign-in-alt"></i> Войти
+                    </button>
+                </div>
+                
+                <!-- Форма регистрации -->
+                <div class="auth-form" id="register-form" style="display: none;">
+                    <div class="form-group">
+                        <label>Имя</label>
+                        <input type="text" id="register-name" class="minimal-input" placeholder="Ваше имя" autocomplete="name">
+                        <div class="error-message" id="register-name-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="register-email" class="minimal-input" placeholder="your@email.com" autocomplete="email">
+                        <div class="error-message" id="register-email-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Пароль</label>
+                        <input type="password" id="register-password" class="minimal-input" placeholder="Минимум 6 символов" autocomplete="new-password">
+                        <div class="error-message" id="register-password-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Подтвердите пароль</label>
+                        <input type="password" id="register-password-confirm" class="minimal-input" placeholder="Повторите пароль" autocomplete="new-password">
+                        <div class="error-message" id="register-password-confirm-error"></div>
+                    </div>
+                    <button id="register-btn" class="btn-primary" style="width: 100%; margin-top: 20px;">
+                        <i class="fas fa-user-plus"></i> Зарегистрироваться
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно профиля -->
+    <div class="modal-overlay" id="profile-modal" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-circle"></i> Профиль</h3>
+                <button class="icon-btn close-btn" id="close-profile-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="profile-info" id="profile-info">
+                    <div class="profile-avatar">
+                        <div class="avatar-circle">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                    <div class="profile-details">
+                        <h4 id="profile-name">Имя пользователя</h4>
+                        <p id="profile-email">email@example.com</p>
+                        <p class="profile-meta" id="profile-joined">Зарегистрирован: --</p>
+                    </div>
+                </div>
+                
+                <div class="profile-stats">
+                    <div class="profile-stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="profile-tasks-count">0</div>
+                            <div class="stat-label">Всего задач</div>
+                        </div>
+                    </div>
+                    <div class="profile-stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="profile-completed-count">0</div>
+                            <div class="stat-label">Выполнено</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-actions">
+                    <button class="btn-secondary" id="change-password-btn" style="width: 100%; margin-bottom: 10px;">
+                        <i class="fas fa-key"></i> Изменить пароль
+                    </button>
+                    <button class="btn-secondary" id="logout-btn" style="width: 100%;">
+                        <i class="fas fa-sign-out-alt"></i> Выйти
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно изменения пароля -->
+    <div class="modal-overlay" id="change-password-modal" style="display: none;">
+        <div class="modal modal-sm">
+            <div class="modal-header">
+                <h3><i class="fas fa-key"></i> Изменить пароль</h3>
+                <button class="icon-btn close-btn" id="close-change-password-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Текущий пароль</label>
+                    <input type="password" id="current-password" class="minimal-input" placeholder="Введите текущий пароль">
+                    <div class="error-message" id="current-password-error"></div>
+                </div>
+                <div class="form-group">
+                    <label>Новый пароль</label>
+                    <input type="password" id="new-password" class="minimal-input" placeholder="Минимум 6 символов">
+                    <div class="error-message" id="new-password-error"></div>
+                </div>
+                <div class="form-group">
+                    <label>Подтвердите новый пароль</label>
+                    <input type="password" id="new-password-confirm" class="minimal-input" placeholder="Повторите новый пароль">
+                    <div class="error-message" id="new-password-confirm-error"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="save-password-btn" class="btn-primary">Сохранить</button>
+                <button id="cancel-password-btn" class="btn-secondary">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Скрипты -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ru.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.30.0/index.min.js"></script>
+    
+    <!-- Модули (новый код) - загружаем первым -->
+    <script type="module" src="js/app.js"></script>
+    
+    <!-- Старый script.js для обратной совместимости (пока не все функции перенесены) -->
+    <!-- Загружаем после модулей, чтобы новые функции переопределили старые -->
+    <script src="script.js"></script>
+    <!-- Fallback для старых браузеров -->
+    <script nomodule>
+        alert('Ваш браузер не поддерживает модули ES6. Пожалуйста, обновите браузер.');
+    </script>
+</body>
+</html>
