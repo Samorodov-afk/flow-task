@@ -574,12 +574,17 @@ function initApp() {
     
     // Если пользователь авторизован, инициализируем основное приложение
     if (state.user) {
+        console.log('User authenticated, initializing app. User:', state.user);
         // Убеждаемся, что категории инициализированы
         if (!state.categories || state.categories.length === 0) {
             state.categories = [{ id: 'general', name: t('generalCategory'), color: '#7395ae' }];
         }
         
-        setupEventListeners();
+        // Небольшая задержка чтобы DOM точно был готов
+        setTimeout(() => {
+            console.log('Calling setupEventListeners from initApp');
+            setupEventListeners();
+        }, 100);
         initMobileMenu();
         initSearch();
         initValidation();
@@ -967,12 +972,29 @@ function updateFooterDateTime() {
 
 // Настройка обработчиков событий
 function setupEventListeners() {
+    console.log('setupEventListeners called');
+    
     // Добавление задачи
     const addTaskBtn = document.getElementById('add-task-btn');
     const taskInput = document.getElementById('task-input');
     
+    console.log('addTaskBtn found:', !!addTaskBtn);
+    console.log('taskInput found:', !!taskInput);
+    
     if (addTaskBtn) {
-        addTaskBtn.addEventListener('click', addTask);
+        // Удаляем все старые обработчики
+        const newBtn = addTaskBtn.cloneNode(true);
+        addTaskBtn.parentNode.replaceChild(newBtn, addTaskBtn);
+        // Добавляем новый обработчик
+        newBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('addTaskBtn clicked!');
+            addTask();
+        });
+        console.log('✓ addTaskBtn event listener attached');
+    } else {
+        console.warn('✗ addTaskBtn not found!');
     }
     
     if (taskInput) {
@@ -1022,8 +1044,17 @@ function setupEventListeners() {
     }
 
     // Фильтры задач
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    console.log('Found filter buttons:', filterBtns.length);
+    filterBtns.forEach(btn => {
+        // Удаляем старые обработчики
+        const newBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newBtn, btn);
+        // Добавляем новый обработчик
+        newBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Filter button clicked:', this.dataset.filter);
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             state.currentFilter = this.dataset.filter;

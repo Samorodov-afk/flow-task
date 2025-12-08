@@ -269,54 +269,73 @@ async function handleLandingLogin() {
             
             // Инициализируем приложение после небольшой задержки для рендеринга
             setTimeout(() => {
-                console.log('Initializing app after login...');
+                console.log('=== Initializing app after login ===');
                 
                 // ВАЖНО: Синхронизируем state.user перед вызовом initApp
                 if (typeof window.state === 'object') {
                     window.state.user = result.user;
-                    console.log('Synced state.user:', window.state.user);
+                    console.log('✓ Synced state.user:', window.state.user);
+                } else {
+                    console.warn('window.state not found!');
                 }
                 
-                // Вызываем старую initApp из script.js (она вызывает setupEventListeners внутри)
-                if (typeof window.initApp === 'function') {
-                    console.log('Calling window.initApp from script.js...');
-                    try {
-                        window.initApp();
-                        console.log('window.initApp called successfully');
-                    } catch (e) {
-                        console.error('Error calling script.js initApp:', e);
-                        // Fallback: вызываем setupEventListeners напрямую
-                        if (typeof window.setupEventListeners === 'function') {
-                            console.log('Fallback: calling setupEventListeners directly');
-                            window.setupEventListeners();
-                        }
-                    }
-                } else {
-                    console.warn('window.initApp not found, calling setupEventListeners directly');
-                    // Если функция не найдена, вызываем setupEventListeners напрямую
-                    if (typeof window.setupEventListeners === 'function') {
+                // Рендерим все сначала
+                console.log('Calling renderAll...');
+                renderAll(true);
+                
+                // Ждем еще немного чтобы DOM точно обновился
+                setTimeout(() => {
+                    // Вызываем старую initApp из script.js (она вызывает setupEventListeners внутри)
+                    if (typeof window.initApp === 'function') {
+                        console.log('Calling window.initApp from script.js...');
                         try {
-                            window.setupEventListeners();
-                            if (typeof window.initMobileMenu === 'function') window.initMobileMenu();
-                            if (typeof window.initSearch === 'function') window.initSearch();
-                            if (typeof window.initValidation === 'function') window.initValidation();
-                            if (typeof window.initNotifications === 'function') window.initNotifications();
-                            if (typeof window.initKeyboardShortcuts === 'function') window.initKeyboardShortcuts();
-                            if (typeof window.initDragAndDrop === 'function') window.initDragAndDrop();
-                            if (typeof window.initSettingsModal === 'function') window.initSettingsModal();
-                            if (typeof window.initAnalyticsModal === 'function') window.initAnalyticsModal();
-                            console.log('Event listeners set up directly');
+                            window.initApp();
+                            console.log('✓ window.initApp called successfully');
                         } catch (e) {
-                            console.error('Error setting up event listeners:', e);
+                            console.error('✗ Error calling script.js initApp:', e);
+                            // Fallback: вызываем setupEventListeners напрямую
+                            if (typeof window.setupEventListeners === 'function') {
+                                console.log('Fallback: calling setupEventListeners directly');
+                                window.setupEventListeners();
+                            }
                         }
                     } else {
-                        console.error('setupEventListeners not found!');
+                        console.warn('window.initApp not found, calling setupEventListeners directly');
+                        // Если функция не найдена, вызываем setupEventListeners напрямую
+                        if (typeof window.setupEventListeners === 'function') {
+                            try {
+                                console.log('Calling setupEventListeners directly...');
+                                window.setupEventListeners();
+                                if (typeof window.initMobileMenu === 'function') window.initMobileMenu();
+                                if (typeof window.initSearch === 'function') window.initSearch();
+                                if (typeof window.initValidation === 'function') window.initValidation();
+                                if (typeof window.initNotifications === 'function') window.initNotifications();
+                                if (typeof window.initKeyboardShortcuts === 'function') window.initKeyboardShortcuts();
+                                if (typeof window.initDragAndDrop === 'function') window.initDragAndDrop();
+                                if (typeof window.initSettingsModal === 'function') window.initSettingsModal();
+                                if (typeof window.initAnalyticsModal === 'function') window.initAnalyticsModal();
+                                console.log('✓ Event listeners set up directly');
+                            } catch (e) {
+                                console.error('✗ Error setting up event listeners:', e);
+                            }
+                        } else {
+                            console.error('✗ setupEventListeners not found!');
+                        }
                     }
-                }
-                
-                // Также вызываем нашу модульную инициализацию
-                console.log('Calling module initApp...');
-                initApp();
+                    
+                    // Также вызываем нашу модульную инициализацию
+                    console.log('Calling module initApp...');
+                    initApp();
+                    
+                    // Дополнительная проверка: вызываем setupEventListeners еще раз через секунду
+                    setTimeout(() => {
+                        console.log('Final check: calling setupEventListeners again...');
+                        if (typeof window.setupEventListeners === 'function') {
+                            window.setupEventListeners();
+                            console.log('✓ setupEventListeners called again');
+                        }
+                    }, 1000);
+                }, 200);
             }, 300);
         } else {
             showNotification(result.errors.join(', ') || window.t('wrongCredentials'), 'error');
