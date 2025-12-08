@@ -47,6 +47,7 @@ window.setCurrentUser = setCurrentUser;
 
 // Инициализация приложения
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('=== DOMContentLoaded: Module app.js ===');
     // Не блокируем старый script.js, пусть оба работают вместе
     window.__FLOW_INIT__ = true;
 
@@ -56,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Инициализация state manager
         const user = getCurrentUser();
+        console.log('Current user from storage:', user);
         if (user) {
             stateManager.set('user', user);
             stateManager.loadUserData();
@@ -270,13 +272,15 @@ async function handleLandingLogin() {
             // Инициализируем приложение после небольшой задержки для рендеринга
             setTimeout(() => {
                 console.log('=== Initializing app after login ===');
+                console.log('User:', result.user);
                 
                 // ВАЖНО: Синхронизируем state.user перед вызовом initApp
                 if (typeof window.state === 'object') {
                     window.state.user = result.user;
-                    console.log('✓ Synced state.user:', window.state.user);
+                    console.log('✓ Synced window.state.user:', window.state.user);
                 } else {
-                    console.warn('window.state not found!');
+                    console.error('✗ window.state not found! Creating it...');
+                    window.state = { user: result.user };
                 }
                 
                 // Рендерим все сначала
@@ -285,6 +289,11 @@ async function handleLandingLogin() {
                 
                 // Ждем еще немного чтобы DOM точно обновился
                 setTimeout(() => {
+                    console.log('Checking for functions...');
+                    console.log('window.initApp:', typeof window.initApp);
+                    console.log('window.setupEventListeners:', typeof window.setupEventListeners);
+                    console.log('window.state:', window.state);
+                    
                     // Вызываем старую initApp из script.js (она вызывает setupEventListeners внутри)
                     if (typeof window.initApp === 'function') {
                         console.log('Calling window.initApp from script.js...');
@@ -300,7 +309,7 @@ async function handleLandingLogin() {
                             }
                         }
                     } else {
-                        console.warn('window.initApp not found, calling setupEventListeners directly');
+                        console.error('✗ window.initApp not found!');
                         // Если функция не найдена, вызываем setupEventListeners напрямую
                         if (typeof window.setupEventListeners === 'function') {
                             try {
@@ -329,14 +338,17 @@ async function handleLandingLogin() {
                     
                     // Дополнительная проверка: вызываем setupEventListeners еще раз через секунду
                     setTimeout(() => {
-                        console.log('Final check: calling setupEventListeners again...');
+                        console.log('=== Final check: calling setupEventListeners again ===');
                         if (typeof window.setupEventListeners === 'function') {
+                            console.log('Calling setupEventListeners...');
                             window.setupEventListeners();
                             console.log('✓ setupEventListeners called again');
+                        } else {
+                            console.error('✗ setupEventListeners still not found!');
                         }
                     }, 1000);
-                }, 200);
-            }, 300);
+                }, 500);
+            }, 500);
         } else {
             showNotification(result.errors.join(', ') || window.t('wrongCredentials'), 'error');
         }

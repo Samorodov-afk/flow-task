@@ -982,19 +982,23 @@ function setupEventListeners() {
     console.log('taskInput found:', !!taskInput);
     
     if (addTaskBtn) {
-        // Удаляем все старые обработчики
-        const newBtn = addTaskBtn.cloneNode(true);
-        addTaskBtn.parentNode.replaceChild(newBtn, addTaskBtn);
+        // Используем делегирование событий для надежности
+        // Удаляем старый обработчик если есть
+        addTaskBtn.onclick = null;
         // Добавляем новый обработчик
-        newBtn.addEventListener('click', function(e) {
+        addTaskBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            console.log('addTaskBtn clicked!');
-            addTask();
-        });
-        console.log('✓ addTaskBtn event listener attached');
+            console.log('✓ addTaskBtn clicked!');
+            if (typeof addTask === 'function') {
+                addTask();
+            } else {
+                console.error('addTask function not found!');
+            }
+        }, { once: false, capture: false });
+        console.log('✓ addTaskBtn event listener attached, element:', addTaskBtn);
     } else {
-        console.warn('✗ addTaskBtn not found!');
+        console.error('✗ addTaskBtn not found! Available IDs:', Array.from(document.querySelectorAll('[id]')).map(el => el.id));
     }
     
     if (taskInput) {
@@ -5245,25 +5249,33 @@ function handleChangePassword() {
 
 // Запуск приложения
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('=== DOMContentLoaded: script.js ===');
     // Всегда инициализируем, но синхронизируем состояние с новыми модулями
     try {
         // Если новый модульный код уже запустился, синхронизируем состояние
         if (window.__FLOW_INIT__ && window.stateManager) {
+            console.log('Syncing state from stateManager...');
             // Синхронизируем состояние из нового stateManager в старый state
             const user = window.stateManager.get('user');
+            console.log('User from stateManager:', user);
             if (user && !state.user) {
                 state.user = user;
                 loadUserData();
+                console.log('State synced, user loaded');
             }
         }
         
-        // Всегда вызываем initApp для инициализации обработчиков событий
-        initApp();
-        updateProfileButton();
-        
-        // Экспортируем initApp в window для доступа из модульного кода
+        // Экспортируем функции в window ДО вызова initApp
         window.initApp = initApp;
         window.setupEventListeners = setupEventListeners;
+        window.initAppAfterAuth = initAppAfterAuth;
+        console.log('Functions exported to window');
+        
+        // Всегда вызываем initApp для инициализации обработчиков событий
+        console.log('Calling initApp...');
+        initApp();
+        updateProfileButton();
+        console.log('initApp completed');
     } catch (error) {
         console.error('Ошибка при запуске приложения:', error);
         showNotification(t('appLoadError'), 'error');
