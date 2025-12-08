@@ -5229,6 +5229,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Всегда вызываем initApp для инициализации обработчиков событий
         initApp();
         updateProfileButton();
+        
+        // Экспортируем initApp в window для доступа из модульного кода
+        window.initApp = initApp;
+        window.setupEventListeners = setupEventListeners;
     } catch (error) {
         console.error('Ошибка при запуске приложения:', error);
         showNotification(t('appLoadError'), 'error');

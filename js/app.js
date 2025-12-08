@@ -269,16 +269,55 @@ async function handleLandingLogin() {
             
             // Инициализируем приложение после небольшой задержки для рендеринга
             setTimeout(() => {
-                initApp();
-                // Вызываем старую функцию initAppAfterAuth если она есть
-                if (typeof window.initAppAfterAuth === 'function') {
-                    const oldInit = window.initAppAfterAuth;
-                    // Проверяем что это не наша функция
-                    if (oldInit.toString().includes('setupEventListeners')) {
-                        oldInit();
+                console.log('Initializing app after login...');
+                
+                // ВАЖНО: Синхронизируем state.user перед вызовом initApp
+                if (typeof window.state === 'object') {
+                    window.state.user = result.user;
+                    console.log('Synced state.user:', window.state.user);
+                }
+                
+                // Вызываем старую initApp из script.js (она вызывает setupEventListeners внутри)
+                if (typeof window.initApp === 'function') {
+                    console.log('Calling window.initApp from script.js...');
+                    try {
+                        window.initApp();
+                        console.log('window.initApp called successfully');
+                    } catch (e) {
+                        console.error('Error calling script.js initApp:', e);
+                        // Fallback: вызываем setupEventListeners напрямую
+                        if (typeof window.setupEventListeners === 'function') {
+                            console.log('Fallback: calling setupEventListeners directly');
+                            window.setupEventListeners();
+                        }
+                    }
+                } else {
+                    console.warn('window.initApp not found, calling setupEventListeners directly');
+                    // Если функция не найдена, вызываем setupEventListeners напрямую
+                    if (typeof window.setupEventListeners === 'function') {
+                        try {
+                            window.setupEventListeners();
+                            if (typeof window.initMobileMenu === 'function') window.initMobileMenu();
+                            if (typeof window.initSearch === 'function') window.initSearch();
+                            if (typeof window.initValidation === 'function') window.initValidation();
+                            if (typeof window.initNotifications === 'function') window.initNotifications();
+                            if (typeof window.initKeyboardShortcuts === 'function') window.initKeyboardShortcuts();
+                            if (typeof window.initDragAndDrop === 'function') window.initDragAndDrop();
+                            if (typeof window.initSettingsModal === 'function') window.initSettingsModal();
+                            if (typeof window.initAnalyticsModal === 'function') window.initAnalyticsModal();
+                            console.log('Event listeners set up directly');
+                        } catch (e) {
+                            console.error('Error setting up event listeners:', e);
+                        }
+                    } else {
+                        console.error('setupEventListeners not found!');
                     }
                 }
-            }, 100);
+                
+                // Также вызываем нашу модульную инициализацию
+                console.log('Calling module initApp...');
+                initApp();
+            }, 300);
         } else {
             showNotification(result.errors.join(', ') || window.t('wrongCredentials'), 'error');
         }
@@ -357,8 +396,21 @@ async function handleLandingRegister() {
             // Переключаем на приложение
             checkAuthAndShowContent(true);
             setTimeout(() => {
+                // Вызываем старую initApp из script.js для полной инициализации
+                if (typeof window.initApp === 'function') {
+                    const oldInitApp = window.initApp;
+                    if (oldInitApp.toString().includes('setupEventListeners') || 
+                        oldInitApp.toString().includes('checkAuthAndShowContent')) {
+                        try {
+                            oldInitApp();
+                        } catch (e) {
+                            console.warn('Old initApp error:', e);
+                        }
+                    }
+                }
+                // Также вызываем нашу модульную инициализацию
                 initApp();
-            }, 300);
+            }, 200);
         } else {
             showNotification(result.errors.join(', '), 'error');
         }
