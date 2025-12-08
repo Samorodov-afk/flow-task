@@ -6,7 +6,7 @@ import { StorageManager } from './storage.js';
 import { createUser, loginUser, logoutUser, changePassword, getCurrentUser, setCurrentUser } from './auth.js';
 import { addTask, updateTask, deleteTask, toggleTask, archiveTask, unarchiveTask, getFilteredTasks } from './tasks.js';
 import { addCategory, deleteCategory } from './categories.js';
-import { renderAll, renderTasks, renderCategories, renderQuickTasks, renderUrgentTasks, debouncedRender } from './ui.js';
+import { renderAll, renderTasks, renderCategories, renderQuickTasks, renderUrgentTasks, debouncedRender, updateAppInfo, updateProgressBars } from './ui.js';
 import { analyticsManager } from './analytics.js';
 import { escapeHtml, debounce, highlightSearchText, isOverdue } from './utils.js';
 import { validators } from './validators.js';
@@ -867,6 +867,36 @@ window.useQuickTask = window.useQuickTask;
 window.deleteQuickTask = window.deleteQuickTask;
 window.toggleQuickTasksEditMode = window.toggleQuickTasksEditMode;
 
+// Экспортируем функции из ui.js
+window.updateAppInfo = updateAppInfo;
+window.updateProgressBars = updateProgressBars;
+
+// Функции editTask, showDeleteConfirm, toggleTaskNotes должны быть определены в script.js
+// Проверяем их наличие и добавляем fallback если нужно
+if (typeof window.editTask !== 'function') {
+    window.editTask = function(id) {
+        console.warn('editTask not implemented yet, task id:', id);
+    };
+}
+if (typeof window.showDeleteConfirm !== 'function') {
+    window.showDeleteConfirm = function(id) {
+        if (confirm('Удалить задачу?')) {
+            deleteTask(id);
+        }
+    };
+}
+if (typeof window.toggleTaskNotes !== 'function') {
+    window.toggleTaskNotes = function(id) {
+        const taskCard = document.querySelector(`.task-card[data-id="${id}"], .urgent-task-card[data-id="${id}"]`);
+        if (taskCard) {
+            const notesPreview = taskCard.querySelector('.task-notes-preview');
+            if (notesPreview) {
+                notesPreview.classList.toggle('expanded');
+            }
+        }
+    };
+}
+
 // Гарантируем, что наша версия проверки авторизации доминирует над старым script.js
 // и удаляем все старые обработчики с кнопок, полностью клонируя узлы
 function rebindLandingHandlers() {
@@ -894,4 +924,40 @@ window.addEventListener('load', () => {
         });
     }
 });
+
+// Функция для очистки кэша и Service Worker (для отладки)
+window.clearCacheAndSW = async function() {
+    try {
+        // Отменяем регистрацию всех Service Workers
+        if ('serviceWorker' in navigator) {
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            for (let registration of registrations) {
+                await registration.unregister();
+                console.log('Service Worker unregistered:', registration.scope);
+            }
+        }
+        
+        // Очищаем кэш
+        if ('caches' in window) {
+            const cacheNames = await caches.keys();
+            for (let cacheName of cacheNames) {
+                await caches.delete(cacheName);
+                console.log('Cache deleted:', cacheName);
+            }
+        }
+        
+        // Очищаем localStorage (опционально, закомментируйте если не нужно)
+        // localStorage.clear();
+        
+        console.log('✓ Cache and Service Worker cleared!');
+        alert('Кэш и Service Worker очищены! Страница будет перезагружена.');
+        window.location.reload(true);
+    } catch (error) {
+        console.error('Error clearing cache:', error);
+        alert('Ошибка при очистке кэша: ' + error.message);
+    }
+};
+
+// Добавляем в консоль подсказку
+console.log('%c💡 Для очистки кэша и Service Worker выполните: clearCacheAndSW()', 'color: #7395ae; font-weight: bold;');
 

@@ -440,14 +440,51 @@ export function updateCategorySelects() {
  * Обновить информацию о приложении
  */
 export function updateAppInfo() {
-    // Реализация будет в основном файле
+    try {
+        const tasks = stateManager.get('tasks') || [];
+        const categories = stateManager.get('categories') || [];
+        
+        const totalTasksEl = document.getElementById('settings-total-tasks');
+        const completedTasksEl = document.getElementById('settings-completed-tasks');
+        const categoriesCountEl = document.getElementById('settings-categories-count');
+        
+        if (totalTasksEl) {
+            totalTasksEl.textContent = tasks.length;
+        }
+        if (completedTasksEl) {
+            completedTasksEl.textContent = tasks.filter(t => t.completed).length;
+        }
+        if (categoriesCountEl) {
+            categoriesCountEl.textContent = categories.length;
+        }
+    } catch (error) {
+        console.error('Update app info error:', error);
+    }
 }
 
 /**
  * Обновить прогресс-бары
  */
 export function updateProgressBars() {
-    // Реализация будет в основном файле
+    try {
+        const tasks = stateManager.get('tasks') || [];
+        const activeTasks = tasks.filter(t => !t.completed && !t.archived);
+        
+        const highTasks = activeTasks.filter(t => t.priority === 'high').length;
+        const mediumTasks = activeTasks.filter(t => t.priority === 'medium').length;
+        const lowTasks = activeTasks.filter(t => t.priority === 'low').length;
+        
+        // Обновляем компактные счетчики
+        const highCountEl = document.getElementById('compact-count-high');
+        const mediumCountEl = document.getElementById('compact-count-medium');
+        const lowCountEl = document.getElementById('compact-count-low');
+        
+        if (highCountEl) highCountEl.textContent = highTasks;
+        if (mediumCountEl) mediumCountEl.textContent = mediumTasks;
+        if (lowCountEl) lowCountEl.textContent = lowTasks;
+    } catch (error) {
+        console.error('Update progress bars error:', error);
+    }
 }
 
 /**

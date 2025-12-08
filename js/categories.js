@@ -82,7 +82,7 @@ export function deleteCategory(categoryId) {
         }
         
         saveCategories();
-        saveTasks();
+        // Сохранение задач происходит через stateManager.save() автоматически
         
         return { success: true, errors: [] };
     } catch (error) {
@@ -113,20 +113,6 @@ function saveCategories() {
         }
     } catch (error) {
         console.error('Save categories error:', error);
-    }
-}
-
-/**
- * Сохранить задачи в localStorage
- */
-function saveTasks() {
-    try {
-        const user = stateManager.get('user');
-        if (user && user.id) {
-            StorageManager.set('flowTasks', stateManager.get('tasks'), user.id);
-        }
-    } catch (error) {
-        console.error('Save tasks error:', error);
     }
 }
 
