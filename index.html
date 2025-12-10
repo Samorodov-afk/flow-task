@@ -182,9 +182,142 @@
                 max-width: 450px;
             }
         }
+
+        /* Модальное окно загрузки */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .bottle-container {
+            position: relative;
+            width: 120px;
+            height: 200px;
+        }
+
+        .bottle {
+            width: 80px;
+            height: 180px;
+            position: relative;
+            margin: 0 auto;
+            background: linear-gradient(to right, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+            border: 3px solid rgba(255,255,255,0.8);
+            border-radius: 8px 8px 4px 4px;
+            box-shadow: 
+                0 0 20px rgba(242, 168, 0, 0.5),
+                inset 0 0 20px rgba(255,255,255,0.1);
+        }
+
+        .bottle-neck {
+            width: 25px;
+            height: 30px;
+            background: linear-gradient(to right, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+            border: 3px solid rgba(255,255,255,0.8);
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+            margin: 0 auto;
+            position: relative;
+            top: -3px;
+        }
+
+        .bottle-cork {
+            width: 20px;
+            height: 15px;
+            background: linear-gradient(135deg, #8B4513, #654321);
+            border-radius: 2px;
+            margin: 0 auto;
+            position: relative;
+            top: -18px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .liquid {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0%;
+            background: linear-gradient(to top, 
+                rgba(217, 0, 18, 0.9) 0%,
+                rgba(242, 168, 0, 0.8) 50%,
+                rgba(0, 51, 160, 0.7) 100%);
+            border-radius: 0 0 4px 4px;
+            transition: height 3s ease-in-out;
+            overflow: hidden;
+        }
+
+        .liquid::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(255,255,255,0.2) 50%,
+                transparent 100%);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .liquid.fill {
+            height: 85%;
+        }
+
+        .loading-text {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .loading-percent {
+            color: #F2A800;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 0.5rem;
+        }
     </style>
 </head>
 <body>
+    <!-- Модальное окно загрузки -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div style="text-align: center;">
+            <div class="bottle-container">
+                <div class="bottle-cork"></div>
+                <div class="bottle-neck"></div>
+                <div class="bottle">
+                    <div class="liquid" id="liquid"></div>
+                </div>
+            </div>
+            <div class="loading-text">Миша наливает коньяк... 🥃</div>
+            <div class="loading-percent" id="loadingPercent">0%</div>
+        </div>
+    </div>
+
     <div class="container">
         <div>
             <h1 class="logo">mihahyesos.vpn</h1>
@@ -239,36 +372,73 @@
     <script>
         function handleConnect() {
             const button = document.querySelector('.cta-button');
+            const overlay = document.getElementById('loadingOverlay');
+            const liquid = document.getElementById('liquid');
+            const loadingPercent = document.getElementById('loadingPercent');
             const originalText = button.textContent;
-            const messages = [
-                'Проверяем...',
-                'Миша звонит маме...',
-                'Настраиваем...',
-                'Готовим лаваш...',
-                'Готово!'
-            ];
             
-            let messageIndex = 0;
+            // Показываем модальное окно
+            overlay.classList.add('show');
             button.disabled = true;
-            button.style.opacity = '0.7';
             
-            const interval = setInterval(() => {
-                if (messageIndex < messages.length) {
-                    button.textContent = messages[messageIndex];
-                    messageIndex++;
-                } else {
-                    clearInterval(interval);
-                    button.textContent = '✓ Подключено! 🇦🇲';
-                    button.style.background = 'linear-gradient(45deg, #F2A800, #0033A0)';
-                    button.style.opacity = '1';
+            // Сбрасываем жидкость
+            liquid.style.height = '0%';
+            liquid.classList.remove('fill');
+            
+            // Анимация наливания
+            setTimeout(() => {
+                liquid.classList.add('fill');
+                
+                // Анимация процентов
+                let percent = 0;
+                const percentInterval = setInterval(() => {
+                    percent += 2;
+                    if (percent <= 100) {
+                        loadingPercent.textContent = percent + '%';
+                    } else {
+                        clearInterval(percentInterval);
+                    }
+                }, 60);
+                
+                // Обновляем текст загрузки
+                const loadingTexts = [
+                    'Миша наливает коньяк... 🥃',
+                    'Проверяем соединение...',
+                    'Миша звонит маме за советом...',
+                    'Настраиваем серверы...',
+                    'Почти готово!'
+                ];
+                
+                let textIndex = 0;
+                const textInterval = setInterval(() => {
+                    if (textIndex < loadingTexts.length) {
+                        document.querySelector('.loading-text').textContent = loadingTexts[textIndex];
+                        textIndex++;
+                    } else {
+                        clearInterval(textInterval);
+                    }
+                }, 600);
+                
+                // Завершение загрузки
+                setTimeout(() => {
+                    loadingPercent.textContent = '100%';
+                    document.querySelector('.loading-text').textContent = '✓ Подключено! Миша гордится! 🇦🇲';
                     
                     setTimeout(() => {
-                        button.textContent = originalText;
-                        button.style.background = 'linear-gradient(45deg, #D90012, #F2A800)';
-                        button.disabled = false;
-                    }, 2000);
-                }
-            }, 600);
+                        overlay.classList.remove('show');
+                        button.textContent = '✓ Подключено! 🇦🇲';
+                        button.style.background = 'linear-gradient(45deg, #F2A800, #0033A0)';
+                        
+                        setTimeout(() => {
+                            button.textContent = originalText;
+                            button.style.background = 'linear-gradient(45deg, #D90012, #F2A800)';
+                            button.disabled = false;
+                            liquid.classList.remove('fill');
+                            liquid.style.height = '0%';
+                        }, 2000);
+                    }, 1000);
+                }, 3000);
+            }, 100);
         }
 
         // Предотвращаем скролл на мобильных
