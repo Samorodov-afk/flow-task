@@ -33,18 +33,18 @@
             border-radius: 25px;
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            padding: 30px 25px;
+            padding: 25px 20px;
             text-align: center;
         }
         
         .header {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
         
         h1 {
-            font-size: 2.2rem;
+            font-size: 2rem;
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             background: linear-gradient(45deg, #fff, #ffeb3b);
             -webkit-background-clip: text;
             background-clip: text;
@@ -52,33 +52,33 @@
         }
         
         .subtitle {
-            font-size: 1.1rem;
+            font-size: 1rem;
             opacity: 0.9;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
         
         .destination {
             display: flex;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
             flex-wrap: wrap;
-            margin-top: 20px;
+            margin-top: 15px;
         }
         
         .destination span {
             background: rgba(255, 255, 255, 0.15);
-            padding: 10px 18px;
+            padding: 8px 15px;
             border-radius: 20px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             backdrop-filter: blur(5px);
         }
         
         .days-container {
-            margin: 40px 0;
-            padding: 30px 20px;
+            margin: 30px 0;
+            padding: 25px 15px;
             background: rgba(0, 0, 0, 0.25);
             border-radius: 20px;
             position: relative;
@@ -96,13 +96,13 @@
         }
         
         .days-label {
-            font-size: 1.3rem;
-            margin-bottom: 20px;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
             color: #ffeb3b;
         }
         
         .days-number {
-            font-size: 5.5rem;
+            font-size: 4.5rem;
             font-weight: 900;
             line-height: 1;
             text-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
@@ -110,58 +110,106 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
         
         .days-text {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: 600;
             opacity: 0.9;
         }
         
-        .fact-container {
-            margin-top: 35px;
-            padding: 25px;
+        .content-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .fact-box, .word-box {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 20px;
-            border-left: 4px solid #ff9800;
+            padding: 20px;
             text-align: left;
             position: relative;
         }
         
-        .fact-title {
+        .fact-box {
+            border-left: 4px solid #ff9800;
+        }
+        
+        .word-box {
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .box-title {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-            font-size: 1.2rem;
+            gap: 8px;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
             color: #ffeb3b;
         }
         
-        .fact-content {
-            font-size: 1.1rem;
-            line-height: 1.5;
+        .word-box .box-title {
+            color: #4CAF50;
+        }
+        
+        .fact-content, .word-content {
+            font-size: 1rem;
+            line-height: 1.4;
             opacity: 0.95;
+        }
+        
+        .word-item {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .word-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .russian {
+            font-weight: 600;
+            color: #ffeb3b;
+            margin-bottom: 4px;
+        }
+        
+        .thai {
+            font-size: 1.3rem;
+            color: white;
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+        }
+        
+        .pronunciation {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            font-style: italic;
         }
         
         .day-indicator {
             position: absolute;
-            top: -12px;
-            right: 20px;
+            top: -10px;
+            right: 15px;
             background: linear-gradient(45deg, #ff4081, #ff9800);
-            padding: 6px 18px;
+            padding: 5px 15px;
             border-radius: 20px;
             font-weight: bold;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             box-shadow: 0 5px 15px rgba(255, 64, 129, 0.3);
         }
         
         .footer {
-            margin-top: 25px;
-            font-size: 0.85rem;
+            margin-top: 20px;
+            font-size: 0.8rem;
             opacity: 0.8;
             text-align: center;
-            padding-top: 20px;
+            padding-top: 15px;
             border-top: 1px solid rgba(255, 255, 255, 0.2);
         }
         
@@ -178,47 +226,56 @@
         
         /* Декоративные элементы */
         .beach-icon {
-            font-size: 1.8rem;
-            margin: 15px 0;
+            font-size: 1.5rem;
+            margin: 12px 0;
             color: #ffeb3b;
         }
         
         /* Медиа-запросы для телефонов */
         @media (max-height: 700px) {
             .container {
-                padding: 20px;
+                padding: 20px 15px;
+                max-height: 95vh;
+                overflow-y: auto;
             }
             
             h1 {
-                font-size: 1.9rem;
+                font-size: 1.8rem;
             }
             
             .days-number {
-                font-size: 4.5rem;
+                font-size: 4rem;
             }
             
-            .fact-container {
-                padding: 20px;
+            .fact-box, .word-box {
+                padding: 15px;
             }
             
-            .fact-content {
-                font-size: 1rem;
+            .content-container {
+                gap: 12px;
             }
         }
         
         @media (max-height: 600px) {
             .days-number {
-                font-size: 3.8rem;
+                font-size: 3.5rem;
             }
             
             .days-container {
-                margin: 25px 0;
-                padding: 20px 15px;
+                margin: 20px 0;
+                padding: 20px 12px;
             }
             
-            .fact-container {
-                margin-top: 25px;
-                padding: 18px;
+            .fact-box, .word-box {
+                padding: 12px;
+            }
+            
+            .box-title {
+                font-size: 1rem;
+            }
+            
+            .fact-content, .word-content {
+                font-size: 0.95rem;
             }
         }
         
@@ -234,13 +291,27 @@
             }
             
             .days-number {
-                font-size: 4rem;
+                font-size: 3.5rem;
             }
         }
         
-        /* Убираем возможность увеличения на мобильных */
-        html {
-            -webkit-text-size-adjust: 100%;
+        /* Стили для скролла */
+        .container::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+        
+        .container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+        }
+        
+        .container::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
         }
     </style>
 </head>
@@ -266,89 +337,192 @@
             <div class="days-text">дней</div>
         </div>
         
-        <div class="fact-container">
-            <div class="day-indicator">День <span id="current-day">1</span></div>
-            <div class="fact-title">
-                <i class="fas fa-lightbulb"></i>
-                <span>Факт о Таиланде</span>
+        <div class="content-container">
+            <div class="fact-box">
+                <div class="day-indicator">День <span id="current-day">1</span></div>
+                <div class="box-title">
+                    <i class="fas fa-lightbulb"></i>
+                    <span>Факт о Таиланде</span>
+                </div>
+                <div class="fact-content" id="fact-text">
+                    Загрузка интересного факта...
+                </div>
             </div>
-            <div class="fact-content" id="fact-text">
-                Загрузка интересного факта...
+            
+            <div class="word-box">
+                <div class="box-title">
+                    <i class="fas fa-language"></i>
+                    <span>Тайские слова на сегодня</span>
+                </div>
+                <div class="word-content" id="thai-words">
+                    <div class="word-item">
+                        <div class="russian">Здравствуйте</div>
+                        <div class="thai">สวัสดี</div>
+                        <div class="pronunciation">са-ва́т-ди</div>
+                    </div>
+                    <div class="word-item">
+                        <div class="russian">Спасибо</div>
+                        <div class="thai">ขอบคุณ</div>
+                        <div class="pronunciation">коп-кун</div>
+                    </div>
+                </div>
             </div>
         </div>
         
         <div class="footer">
             <div>Сегодня: <span id="current-date">10.02.2026</span></div>
-            <div style="margin-top: 8px; font-size: 0.8rem;">Прибытие: 04.04.2026</div>
+            <div style="margin-top: 5px; font-size: 0.75rem;">Прибытие: 04.04.2026 • Пхукет, Таиланд</div>
         </div>
     </div>
 
     <script>
-        // Факты о Таиланде, Пхукете и Патонге
+        // Факты о Таиланде
         const thaiFacts = [
-            {
-                fact: "Таиланд — единственная страна в Юго-Восточной Азии, которая никогда не была колонизирована европейскими державами."
-            },
-            {
-                fact: "Пхукет — самый большой остров Таиланда, его площадь составляет 576 км², что примерно сравнимо с размером Сингапура."
-            },
-            {
-                fact: "Пляж Патонг — самый известный и оживленный пляж Пхукета, протяженностью 3,5 км."
-            },
-            {
-                fact: "В Таиланде более 40 000 буддийских храмов, и около 95% населения исповедуют буддизм."
-            },
-            {
-                fact: "Тайская кухня считается одной из самых популярных в мире. Знаменитый суп Том Ям Кунг был признан лучшим супом в мире."
-            },
-            {
-                fact: "Пхукет когда-то был крупным центром добычи олова, что привлекло множество китайских иммигрантов."
-            },
-            {
-                fact: "В Таиланде существует более 1000 различных сортов манго, и сезон манго длится с марта по июнь."
-            },
-            {
-                fact: "На пляже Патонг вода обычно спокойная с ноября по апрель, что делает его идеальным для купания."
-            },
-            {
-                fact: "Тайский массаж является частью традиционной тайской медицины и насчитывает более 2500 лет истории."
-            },
-            {
-                fact: "Пхукет соединен с материком двумя мостами: Сарасин и Тхао Тхеп Красатри."
-            },
-            {
-                fact: "Пхукет знаменит своими закатами, особенно на западном побережье."
-            },
-            {
-                fact: "Тайский Новый год (Сонгкран) празднуется в апреле и известен как самый масштабный фестиваль воды."
-            },
-            {
-                fact: "Пляж Патонг получил свое название от деревни, которая когда-то здесь находилась. 'Патонг' означает 'банановый лес'."
-            },
-            {
-                fact: "На Пхукете находится самая большая статуя Будды на острове — Большой Будда Пхукета высотой 45 метров."
-            },
-            {
-                fact: "Ночная жизнь Патонга сосредоточена вокруг улицы Бангла-Роуд, которая становится пешеходной зоной после 18:00."
-            },
-            {
-                fact: "Пляж Патонг имеет пологий вход в воду, что делает его безопасным для купания детей."
-            },
-            {
-                fact: "На Пхукете проходит один из самых известных в Азии вегетарианских фестивалей."
-            },
-            {
-                fact: "Тайская улыбка — не просто выражение эмоций. У тайцев существует 13 различных типов улыбок."
-            },
-            {
-                fact: "Патонг — отличное место для шопинга с ночным рынком и торговым центром Jungceylon."
-            },
-            {
-                fact: "На Пхукете можно посетить острова Пхи-Пи, знаменитые после фильма 'Пляж' с Леонардо ДиКаприо."
-            },
-            {
-                fact: "Лучшее время для посещения Пхукета — с ноября по апрель, когда стоит сухая погода около 30°C."
-            }
+            { fact: "Таиланд — единственная страна в Юго-Восточной Азии, которая никогда не была колонизирована европейскими державами." },
+            { fact: "Пхукет — самый большой остров Таиланда, его площадь составляет 576 км², что примерно сравнимо с размером Сингапура." },
+            { fact: "Пляж Патонг — самый известный и оживленный пляж Пхукета, протяженностью 3,5 км." },
+            { fact: "В Таиланде более 40 000 буддийских храмов, и около 95% населения исповедуют буддизм." },
+            { fact: "Тайская кухня считается одной из самых популярных в мире. Знаменитый суп Том Ям Кунг был признан лучшим супом в мире." },
+            { fact: "Пхукет когда-то был крупным центром добычи олова, что привлекло множество китайских иммигрантов." },
+            { fact: "В Таиланде существует более 1000 различных сортов манго, и сезон манго длится с марта по июнь." },
+            { fact: "На пляже Патонг вода обычно спокойная с ноября по апрель, что делает его идеальным для купания." },
+            { fact: "Тайский массаж является частью традиционной тайской медицины и насчитывает более 2500 лет истории." },
+            { fact: "Пхукет соединен с материком двумя мостами: Сарасин и Тхао Тхеп Красатри." },
+            { fact: "Пхукет знаменит своими закатами, особенно на западном побережье." },
+            { fact: "Тайский Новый год (Сонгкран) празднуется в апреле и известен как самый масштабный фестиваль воды." },
+            { fact: "Пляж Патонг получил свое название от деревни, которая когда-то здесь находилась. 'Патонг' означает 'банановый лес'." },
+            { fact: "На Пхукете находится самая большая статуя Будды на острове — Большой Будда Пхукета высотой 45 метров." },
+            { fact: "Ночная жизнь Патонга сосредоточена вокруг улицы Бангла-Роуд, которая становится пешеходной зоной после 18:00." },
+            { fact: "Пляж Патонг имеет пологий вход в воду, что делает его безопасным для купания детей." },
+            { fact: "На Пхукете проходит один из самых известных в Азии вегетарианских фестивалей." },
+            { fact: "Тайская улыбка — не просто выражение эмоций. У тайцев существует 13 различных типов улыбок." },
+            { fact: "Патонг — отличное место для шопинга с ночным рынком и торговым центром Jungceylon." },
+            { fact: "На Пхукете можно посетить острова Пхи-Пи, знаменитые после фильма 'Пляж' с Леонардо ДиКаприо." },
+            { fact: "Лучшее время для посещения Пхукета — с ноября по апрель, когда стоит сухая погода около 30°C." }
+        ];
+        
+        // Тайские слова для туристов (по 2 слова в день)
+        const thaiWords = [
+            [
+                { ru: "Здравствуйте", thai: "สวัสดี", pron: "са-ва́т-ди" },
+                { ru: "Спасибо", thai: "ขอบคุณ", pron: "коп-кун" }
+            ],
+            [
+                { ru: "Да", thai: "ใช่", pron: "чай" },
+                { ru: "Нет", thai: "ไม่ใช่", pron: "ма́й-чай" }
+            ],
+            [
+                { ru: "Пожалуйста", thai: "กรุณา", pron: "ка-ру-на́" },
+                { ru: "Извините", thai: "ขอโทษ", pron: "ко-то́т" }
+            ],
+            [
+                { ru: "Здоровья!", thai: "ขอให้สุขภาพแข็งแรง", pron: "ко хай суккапха́ кхэнг рэнг" },
+                { ru: "До свидания", thai: "ลาก่อน", pron: "ла́-кон" }
+            ],
+            [
+                { ru: "Как дела?", thai: "สบายดีไหม", pron: "са-бай-ди ма́й" },
+                { ru: "Хорошо", thai: "ดี", pron: "ди" }
+            ],
+            [
+                { ru: "Плохо", thai: "ไม่ดี", pron: "ма́й ди" },
+                { ru: "Не понимаю", thai: "ไม่เข้าใจ", pron: "ма́й као-джай" }
+            ],
+            [
+                { ru: "Сколько стоит?", thai: "เท่าไหร่", pron: "та́о-ра́й" },
+                { ru: "Дорого", thai: "แพง", pron: "пхэнг" }
+            ],
+            [
+                { ru: "Дешево", thai: "ถูก", pron: "ту̀к" },
+                { ru: "Торговаться", thai: "ต่อรองราคา", pron: "то-ронг ра-ка" }
+            ],
+            [
+                { ru: "Еда", thai: "อาหาร", pron: "а-ха́н" },
+                { ru: "Вода", thai: "น้ำ", pron: "на́м" }
+            ],
+            [
+                { ru: "Чек, пожалуйста", thai: "เช็คบิล", pron: "чек-бин" },
+                { ru: "Туалет", thai: "ห้องน้ำ", pron: "хонг на́м" }
+            ],
+            [
+                { ru: "Отель", thai: "โรงแรม", pron: "ронг-рэм" },
+                { ru: "Пляж", thai: "หาด", pron: "ха̀т" }
+            ],
+            [
+                { ru: "Море", thai: "ทะเล", pron: "та-ле" },
+                { ru: "Солнце", thai: "ดวงอาทิตย์", pron: "дуанг а-ти́т" }
+            ],
+            [
+                { ru: "Жарко", thai: "ร้อน", pron: "ро́н" },
+                { ru: "Холодно", thai: "หนาว", pron: "на́о" }
+            ],
+            [
+                { ru: "Вкусно", thai: "อร่อย", pron: "а-ро́й" },
+                { ru: "Остро", thai: "เผ็ด", pron: "пхэт" }
+            ],
+            [
+                { ru: "Рис", thai: "ข้าว", pron: "кха́о" },
+                { ru: "Лапша", thai: "ก๋วยเตี๋ยว", pron: "куай-тиао" }
+            ],
+            [
+                { ru: "Мясо", thai: "เนื้อ", pron: "ны́а" },
+                { ru: "Рыба", thai: "ปลา", pron: "пла" }
+            ],
+            [
+                { ru: "Фрукты", thai: "ผลไม้", pron: "пхон-ла-ма́й" },
+                { ru: "Кокос", thai: "มะพร้าว", pron: "ма-пра́о" }
+            ],
+            [
+                { ru: "Такси", thai: "แท็กซี่", pron: "тхэк-си" },
+                { ru: "Сколько до...?", thai: "ไป...ไกลไหม", pron: "пай... клай ма́й" }
+            ],
+            [
+                { ru: "Лево", thai: "ซ้าย", pron: "са́й" },
+                { ru: "Право", thai: "ขวา", pron: "кхва" }
+            ],
+            [
+                { ru: "Прямо", thai: "ตรง", pron: "тронг" },
+                { ru: "Здесь", thai: "ที่นี่", pron: "ти-ни́" }
+            ],
+            [
+                { ru: "Там", thai: "ที่นั่น", pron: "ти-на́н" },
+                { ru: "Магазин", thai: "ร้านค้า", pron: "ра́н-кха́" }
+            ],
+            [
+                { ru: "Рынок", thai: "ตลาด", pron: "та-ла́т" },
+                { ru: "Сувениры", thai: "ของที่ระลึก", pron: "кхонг ти ра-лык" }
+            ],
+            [
+                { ru: "Деньги", thai: "เงิน", pron: "нгэн" },
+                { ru: "Банк", thai: "ธนาคาร", pron: "та-на-кхан" }
+            ],
+            [
+                { ru: "Боль", thai: "เจ็บ", pron: "чеп" },
+                { ru: "Врач", thai: "หมอ", pron: "мор" }
+            ],
+            [
+                { ru: "Аптека", thai: "ร้านขายยา", pron: "ран кхай я" },
+                { ru: "Помогите", thai: "ช่วยด้วย", pron: "чуай дуай" }
+            ],
+            [
+                { ru: "Полиция", thai: "ตำรวจ", pron: "там-руат" },
+                { ru: "Опасность", thai: "อันตราย", pron: "ан-та-рай" }
+            ],
+            [
+                { ru: "Красиво", thai: "สวย", pron: "суай" },
+                { ru: "Храм", thai: "วัด", pron: "ват" }
+            ],
+            [
+                { ru: "Массаж", thai: "นวด", pron: "нуат" },
+                { ru: "Пляжный шезлонг", thai: "เก้าอี้ชายหาด", pron: "као-и чай-хат" }
+            ],
+            [
+                { ru: "Зонтик", thai: "ร่ม", pron: "ром" },
+                { ru: "Полотенце", thai: "ผ้าเช็ดตัว", pron: "пха чет туа" }
+            ],
+            [
+                { ru: "Купальник", thai: "ชุดว่ายน้ำ", pron: "чут вай нам" },
+                { ru: "Солнцезащитный крем", thai: "ครีมกันแดด", pron: "крим кан дэт" }
+            ]
         ];
         
         // Дата вылета (03.04.2026)
@@ -384,20 +558,32 @@
                 document.querySelector('.days-number').textContent = days;
             }
             
-            // Расчет текущего дня для показа факта
+            // Расчет текущего дня для показа факта и слов
             const startDate = new Date('2026-02-10');
             const currentDay = Math.floor((now - startDate) / (1000 * 60 * 60 * 24)) + 1;
             
-            // Если день больше количества фактов, начинаем сначала
-            const dayIndex = currentDay > thaiFacts.length ? 
-                (currentDay % thaiFacts.length) - 1 : 
-                currentDay - 1;
+            // Если день больше количества фактов/слов, начинаем сначала
+            const factIndex = (currentDay - 1) % thaiFacts.length;
+            const wordIndex = (currentDay - 1) % thaiWords.length;
             
             // Обновление факта
-            if (dayIndex >= 0 && dayIndex < thaiFacts.length) {
-                document.getElementById('fact-text').textContent = thaiFacts[dayIndex].fact;
-                document.getElementById('current-day').textContent = currentDay;
-            }
+            document.getElementById('fact-text').textContent = thaiFacts[factIndex].fact;
+            document.getElementById('current-day').textContent = currentDay;
+            
+            // Обновление тайских слов
+            const wordContainer = document.getElementById('thai-words');
+            wordContainer.innerHTML = '';
+            
+            thaiWords[wordIndex].forEach(word => {
+                const wordItem = document.createElement('div');
+                wordItem.className = 'word-item';
+                wordItem.innerHTML = `
+                    <div class="russian">${word.ru}</div>
+                    <div class="thai">${word.thai}</div>
+                    <div class="pronunciation">${word.pron}</div>
+                `;
+                wordContainer.appendChild(wordItem);
+            });
         }
         
         // Инициализация при загрузке страницы
