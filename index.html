@@ -2,283 +2,831 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>mihahyesos.vpn</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отсчет до Пхукета | Пляж Патонг</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
-        html, body {
-            height: 100%;
-            overflow: hidden;
-            position: fixed;
-            width: 100%;
-        }
-
+        
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            background: linear-gradient(180deg, 
+                #1a5fb4 0%, 
+                #26a0da 20%, 
+                #40c4ff 40%, 
+                #a2d9ff 60%, 
+                #ffcc80 80%, 
+                #ffb74d 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Пляжный фон с элементами */
+        .beach-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .sun {
+            position: absolute;
+            top: 30px;
+            right: 10%;
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #ffeb3b, #ff9800);
+            border-radius: 50%;
+            box-shadow: 0 0 50px #ff9800, 0 0 100px rgba(255, 152, 0, 0.5);
+            animation: sun-glow 4s infinite alternate;
+        }
+        
+        .palm-1 {
+            position: absolute;
+            bottom: 0;
+            left: 5%;
+            font-size: 120px;
+            color: #2e7d32;
+            transform-origin: bottom center;
+            animation: sway-palm-1 8s infinite alternate ease-in-out;
+        }
+        
+        .palm-2 {
+            position: absolute;
+            bottom: 0;
+            right: 10%;
+            font-size: 100px;
+            color: #388e3c;
+            transform-origin: bottom center;
+            animation: sway-palm-2 7s infinite alternate-reverse ease-in-out;
+        }
+        
+        .waves {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z" fill="%2326a0da"/></svg>') repeat-x;
+            background-size: 1200px 100px;
+            animation: waves 15s linear infinite;
+        }
+        
+        .sand {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(to top, #ffcc80, #ffb74d);
+        }
+        
+        .seashell {
+            position: absolute;
+            bottom: 40px;
+            left: 15%;
+            font-size: 30px;
+            color: #fff8e1;
+            animation: float-shell 12s infinite alternate ease-in-out;
+        }
+        
+        .seashell-2 {
+            position: absolute;
+            bottom: 60px;
+            right: 20%;
+            font-size: 25px;
+            color: #ffecb3;
+            animation: float-shell-2 10s infinite alternate-reverse ease-in-out;
+        }
+        
+        .cloud {
+            position: absolute;
+            top: 15%;
+            left: 5%;
+            font-size: 60px;
+            color: white;
+            opacity: 0.8;
+            animation: cloud-move 30s linear infinite;
+        }
+        
+        .cloud-2 {
+            position: absolute;
+            top: 25%;
+            right: -100px;
+            font-size: 80px;
+            color: white;
+            opacity: 0.6;
+            animation: cloud-move-2 40s linear infinite;
+            animation-delay: 5s;
+        }
+        
+        .parrot {
+            position: absolute;
+            top: 20%;
+            right: 15%;
+            font-size: 40px;
+            color: #4caf50;
+            animation: fly-parrot 25s infinite alternate ease-in-out;
+        }
+        
+        @keyframes sun-glow {
+            0% { box-shadow: 0 0 50px #ff9800, 0 0 100px rgba(255, 152, 0, 0.5); }
+            100% { box-shadow: 0 0 60px #ff9800, 0 0 120px rgba(255, 152, 0, 0.7); }
+        }
+        
+        @keyframes sway-palm-1 {
+            0% { transform: rotate(-10deg); }
+            100% { transform: rotate(10deg); }
+        }
+        
+        @keyframes sway-palm-2 {
+            0% { transform: rotate(-8deg); }
+            100% { transform: rotate(8deg); }
+        }
+        
+        @keyframes waves {
+            0% { background-position-x: 0; }
+            100% { background-position-x: 1200px; }
+        }
+        
+        @keyframes float-shell {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-20px) rotate(10deg); }
+        }
+        
+        @keyframes float-shell-2 {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-15px) rotate(-15deg); }
+        }
+        
+        @keyframes cloud-move {
+            0% { transform: translateX(-100px); }
+            100% { transform: translateX(120vw); }
+        }
+        
+        @keyframes cloud-move-2 {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-120vw); }
+        }
+        
+        @keyframes fly-parrot {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(50px, -30px) rotate(5deg); }
+            50% { transform: translate(100px, 20px) rotate(-5deg); }
+            75% { transform: translate(50px, -20px) rotate(3deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 90%;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #ff4081, #ff9800, #4caf50, #2196f3);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #fff, #ffeb3b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            opacity: 0.95;
+        }
+        
+        .destination-card {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+        
+        .destination-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px 25px;
+            border-radius: 50px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: #262626;
-            padding: 1rem;
+            gap: 10px;
+            font-weight: 600;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
         }
-
-        .container {
-            width: 100%;
-            max-width: 500px;
+        
+        .destination-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .countdown-container {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 40px 30px;
+            margin: 40px 0;
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            height: 100%;
-            max-height: 100vh;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
         }
-
-        .logo {
-            font-size: clamp(2rem, 8vw, 3rem);
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(45deg, #D90012, #0033A0, #F2A800);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -0.5px;
-        }
-
-        .subtitle {
-            font-size: clamp(0.75rem, 3vw, 0.9rem);
-            color: #8e8e8e;
-            margin-bottom: 1.5rem;
-            font-weight: 400;
-        }
-
-        .tagline {
-            font-size: clamp(1.1rem, 5vw, 1.4rem);
-            font-weight: 600;
-            margin-bottom: 0.8rem;
-            color: #262626;
-            line-height: 1.3;
-        }
-
-        .description {
-            font-size: clamp(0.85rem, 3.5vw, 0.95rem);
-            color: #8e8e8e;
-            margin-bottom: 1.5rem;
-            line-height: 1.5;
-            padding: 0 0.5rem;
-        }
-
-        .features {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.8rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .feature {
-            background: #fafafa;
-            padding: 1rem 0.8rem;
-            border-radius: 12px;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            transition: all 0.2s ease;
-        }
-
-        .feature:active {
-            transform: scale(0.98);
-            background: #f0f0f0;
-        }
-
-        .feature-icon {
-            font-size: 1.8rem;
-            margin-bottom: 0.4rem;
-            display: block;
-        }
-
-        .feature-title {
-            font-size: clamp(0.7rem, 3vw, 0.8rem);
-            font-weight: 600;
-            margin-bottom: 0.3rem;
-            color: #262626;
-        }
-
-        .feature-text {
-            font-size: clamp(0.65rem, 2.5vw, 0.7rem);
-            color: #8e8e8e;
-            line-height: 1.3;
-        }
-
-        .cta-button {
+        
+        .countdown-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            background: linear-gradient(45deg, #D90012, #F2A800);
-            color: white;
-            border: none;
-            padding: 1rem;
-            font-size: clamp(0.9rem, 4vw, 1rem);
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none" opacity="0.05"><path d="M50,5 L60,40 L95,40 L65,60 L75,95 L50,75 L25,95 L35,60 L5,40 L40,40 Z" fill="white"/></svg>');
+            background-size: 50px;
+            z-index: -1;
+        }
+        
+        .countdown-title {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            color: #ffeb3b;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .countdown-item {
+            background: linear-gradient(135deg, #ff4081, #7b1fa2);
+            padding: 25px 15px;
+            border-radius: 20px;
+            min-width: 140px;
+            box-shadow: 0 10px 20px rgba(123, 31, 162, 0.4);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .countdown-item:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(123, 31, 162, 0.6);
+        }
+        
+        .countdown-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #ff9800, #ffeb3b);
+        }
+        
+        .countdown-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 10px;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(to bottom, #fff, #e1f5fe);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .countdown-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
             font-weight: 600;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(217, 0, 18, 0.2);
-            font-family: 'Inter', sans-serif;
-            margin-bottom: 1rem;
         }
-
-        .cta-button:active {
-            transform: scale(0.98);
-            box-shadow: 0 2px 8px rgba(217, 0, 18, 0.2);
+        
+        .fact-container {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 40px 35px;
+            margin: 40px 0;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
         }
-
-        .humor-text {
-            font-size: clamp(0.7rem, 3vw, 0.8rem);
-            color: #8e8e8e;
-            line-height: 1.4;
-            margin-bottom: 0.6rem;
-            padding: 0 0.5rem;
+        
+        .fact-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 10px;
+            height: 100%;
+            background: linear-gradient(to bottom, #ff4081, #ff9800, #4caf50, #2196f3);
         }
-
-        .humor-text:last-child {
-            margin-bottom: 0;
+        
+        .day-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #ff4081, #ff9800);
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 10px 20px rgba(255, 64, 129, 0.4);
+            z-index: 2;
         }
-
-        .humor-text strong {
-            color: #D90012;
-            font-weight: 600;
+        
+        .fact-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            color: #ffeb3b;
+            font-size: 1.6rem;
         }
-
-        .quote {
-            font-size: clamp(0.75rem, 3vw, 0.85rem);
-            color: #D90012;
-            font-weight: 500;
+        
+        .fact-content {
+            font-size: 1.3rem;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            padding-left: 10px;
+            position: relative;
+        }
+        
+        .fact-content::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            left: -15px;
+            font-size: 4rem;
+            color: rgba(255, 255, 255, 0.2);
+            font-family: serif;
+        }
+        
+        .fact-source {
+            font-size: 1rem;
+            opacity: 0.8;
             font-style: italic;
-            margin-top: 0.8rem;
-            padding: 0 0.5rem;
+            text-align: right;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
         }
-
+        
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 40px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .beach-icons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            font-size: 2rem;
+            color: #ffeb3b;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .countdown-item {
+                min-width: 110px;
+                padding: 20px 10px;
+            }
+            
+            .countdown-number {
+                font-size: 2.8rem;
+            }
+            
+            .palm-1, .palm-2 {
+                font-size: 80px;
+            }
+            
+            .destination-item {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .fact-content {
+                font-size: 1.1rem;
+            }
+            
+            .parrot {
+                font-size: 30px;
+            }
+        }
+        
         @media (max-width: 480px) {
-            .features {
-                gap: 0.6rem;
+            h1 {
+                font-size: 1.8rem;
             }
             
-            .feature {
-                padding: 0.8rem 0.6rem;
+            .countdown {
+                gap: 10px;
             }
             
-            .feature-icon {
-                font-size: 1.5rem;
-                margin-bottom: 0.3rem;
+            .countdown-item {
+                min-width: 85px;
+                padding: 15px 8px;
+            }
+            
+            .countdown-number {
+                font-size: 2.2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .fact-title {
+                font-size: 1.3rem;
             }
         }
-
-        @media (min-width: 481px) {
-            .container {
-                max-width: 450px;
-            }
+        
+        /* Анимация для счетчика */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 1s infinite;
+        }
+        
+        /* Эффект блеска для заголовка */
+        .shine-text {
+            background: linear-gradient(90deg, #fff, #ffeb3b, #fff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: shine 3s linear infinite;
+        }
+        
+        @keyframes shine {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
         }
     </style>
 </head>
 <body>
+    <!-- Пляжный фон с анимациями -->
+    <div class="beach-background">
+        <div class="sun"></div>
+        <div class="cloud"><i class="fas fa-cloud"></i></div>
+        <div class="cloud-2"><i class="fas fa-cloud"></i></div>
+        <div class="palm-1"><i class="fas fa-tree"></i></div>
+        <div class="palm-2"><i class="fas fa-tree"></i></div>
+        <div class="parrot"><i class="fas fa-dove"></i></div>
+        <div class="sand"></div>
+        <div class="waves"></div>
+        <div class="seashell"><i class="fas fa-stroopwafel"></i></div>
+        <div class="seashell-2"><i class="fas fa-stroopwafel"></i></div>
+    </div>
+    
     <div class="container">
-        <div>
-            <h1 class="logo">mihahyesos.vpn</h1>
-            <p class="subtitle">🇦🇲 VPN от армянского друга Миши</p>
+        <div class="header">
+            <h1 class="shine-text"><i class="fas fa-umbrella-beach"></i> Обратный отсчет до Пхукета</h1>
+            <p class="subtitle">Скоро мы окажемся на райском пляже Патонг!</p>
+            
+            <div class="beach-icons">
+                <i class="fas fa-sun"></i>
+                <i class="fas fa-water"></i>
+                <i class="fas fa-cocktail"></i>
+                <i class="fas fa-fish"></i>
+                <i class="fas fa-sun"></i>
+            </div>
+            
+            <div class="destination-card">
+                <div class="destination-item">
+                    <i class="fas fa-plane-departure"></i>
+                    <span>Вылет: 03.04.2026</span>
+                </div>
+                <div class="destination-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Пхукет, пляж Патонг</span>
+                </div>
+                <div class="destination-item">
+                    <i class="fas fa-suitcase-rolling"></i>
+                    <span>Прибытие: 04.04.2026</span>
+                </div>
+            </div>
         </div>
-
-        <div>
-            <h2 class="tagline">Быстрее, чем Миша бежит за лавашем! 🥙</h2>
-            <p class="description">
-                Надежный VPN с армянским гостеприимством. Никаких границ — только свобода!
-            </p>
-
-            <div class="features">
-                <div class="feature">
-                    <span class="feature-icon">🔒</span>
-                    <div class="feature-title">Защита</div>
-                    <div class="feature-text">Миша не расскажет даже маме 🥃</div>
+        
+        <div class="countdown-container">
+            <h2 class="countdown-title"><i class="far fa-clock"></i> До отпуска на Пхукете осталось:</h2>
+            <div class="countdown">
+                <div class="countdown-item">
+                    <div class="countdown-number" id="days">0</div>
+                    <div class="countdown-label">дней</div>
                 </div>
-                <div class="feature">
-                    <span class="feature-icon">⚡</span>
-                    <div class="feature-title">Скорость</div>
-                    <div class="feature-text">Быстрее "բարև" 🤗</div>
+                <div class="countdown-item">
+                    <div class="countdown-number" id="hours">0</div>
+                    <div class="countdown-label">часов</div>
                 </div>
-                <div class="feature">
-                    <span class="feature-icon">🌍</span>
-                    <div class="feature-title">Серверы</div>
-                    <div class="feature-text">От Еревана до космоса 🚀</div>
+                <div class="countdown-item">
+                    <div class="countdown-number" id="minutes">0</div>
+                    <div class="countdown-label">минут</div>
                 </div>
-                <div class="feature">
-                    <span class="feature-icon">💰</span>
-                    <div class="feature-title">Цена</div>
-                    <div class="feature-text">Бабушке скидка 👵</div>
+                <div class="countdown-item">
+                    <div class="countdown-number" id="seconds">0</div>
+                    <div class="countdown-label">секунд</div>
                 </div>
             </div>
-
-            <button class="cta-button" onclick="handleConnect()">Подключиться</button>
-
-            <div>
-                <p class="humor-text">
-                    ⚠️ <strong>Гарантия:</strong> Если VPN не работает, Миша приедет и починит! 😄
-                </p>
-                <p class="humor-text">
-                    💡 Тестировал на скорости загрузки рецепта долмы. Работает! 🍇
-                </p>
-                <p class="quote">
-                    "Я сделал VPN, чтобы все были свободны. Как армянский дух!"
-                </p>
-            </div>
+        </div>
+        
+        <div class="fact-container">
+            <div class="day-indicator">День <span id="current-day">1</span></div>
+            <h3 class="fact-title"><i class="fas fa-lightbulb"></i> Интересный факт о Таиланде</h3>
+            <p class="fact-content" id="fact-text">Загрузка факта...</p>
+            <p class="fact-source" id="fact-source"></p>
+        </div>
+        
+        <div class="footer">
+            <p><i class="fas fa-calendar-alt"></i> Сайт-счетчик до отпуска на Пхукете • Обновляется ежедневно</p>
+            <p>Сегодня: <span id="current-date">10.02.2026 13:40</span> • Следующее обновление через: <span id="next-update">60</span> сек.</p>
         </div>
     </div>
 
     <script>
-        function handleConnect() {
-            const button = document.querySelector('.cta-button');
-            const originalText = button.textContent;
-            const messages = [
-                'Проверяем...',
-                'Миша звонит маме...',
-                'Настраиваем...',
-                'Готовим лаваш...',
-                'Готово!'
-            ];
+        // Факты о Таиланде, Пхукете и Патонге
+        const thaiFacts = [
+            {
+                fact: "Таиланд — единственная страна в Юго-Восточной Азии, которая никогда не была колонизирована европейскими державами.",
+                source: "Исторический факт"
+            },
+            {
+                fact: "Пхукет — самый большой остров Таиланда, его площадь составляет 576 км², что примерно сравнимо с размером Сингапура.",
+                source: "Географическая справка"
+            },
+            {
+                fact: "Пляж Патонг — самый известный и оживленный пляж Пхукета, протяженностью 3,5 км. Здесь находится самое большое количество отелей, ресторанов и развлечений на острове.",
+                source: "Туристический гид"
+            },
+            {
+                fact: "В Таиланде более 40 000 буддийских храмов, и около 95% населения исповедуют буддизм.",
+                source: "Культурный факт"
+            },
+            {
+                fact: "Тайская кухня считается одной из самых популярных в мире. Знаменитый суп Том Ям Кунг в 2021 году был признан самым лучшим супом в мире по версии Taste Atlas.",
+                source: "Кулинарный факт"
+            },
+            {
+                fact: "Пхукет когда-то был крупным центром добычи олова, что привлекло множество китайских иммигрантов. Их влияние до сих пор заметно в архитектуре и культуре острова.",
+                source: "Историческая справка"
+            },
+            {
+                fact: "В Таиланде существует более 1000 различных сортов манго, и сезон манго длится с марта по июнь.",
+                source: "Гастрономический факт"
+            },
+            {
+                fact: "На пляже Патонг вода обычно спокойная с ноября по апрель, что делает его идеальным для купания в высокий сезон.",
+                source: "Совет туристу"
+            },
+            {
+                fact: "Тайский массаж, известный во всем мире, является частью традиционной тайской медицины и насчитывает более 2500 лет истории.",
+                source: "Культурный факт"
+            },
+            {
+                fact: "Пхукет соединен с материком двумя мостами: Сарасин (старый) и Тхао Тхеп Красатри (новый, открыт в 2011 году).",
+                source: "Инфраструктура"
+            },
+            {
+                fact: "В Таиланде король является очень почитаемой фигурой. Критика монарха запрещена законом, а изображения короля можно увидеть повсюду.",
+                source: "Культурный факт"
+            },
+            {
+                fact: "Пхукет знаменит своими закатами, особенно на западном побережье. Пляж Промтеп считается одним из лучших мест для наблюдения за закатом.",
+                source: "Совет туристу"
+            },
+            {
+                fact: "Тайский Новый год (Сонгкран) празднуется в апреле и известен во всем мире как самый масштабный фестиваль воды.",
+                source: "Культурный факт"
+            },
+            {
+                fact: "Пляж Патонг получил свое название от деревни, которая когда-то здесь находилась. 'Патонг' означает 'банановый лес' на тайском языке.",
+                source: "История названия"
+            },
+            {
+                fact: "Сиамские кошки, известные во всем мире, родом из Таиланда, который раньше назывался Сиам.",
+                source: "Интересный факт"
+            },
+            {
+                fact: "На Пхукете находится самая большая статуя Будды на острове — Большой Будда Пхукета высотой 45 метров.",
+                source: "Достопримечательности"
+            },
+            {
+                fact: "Тайский алфавит является вторым по величине в мире после кхмерского и состоит из 44 согласных и 15 гласных символов.",
+                source: "Лингвистический факт"
+            },
+            {
+                fact: "Ночная жизнь Патонга сосредоточена вокруг улицы Бангла-Роуд, которая становится пешеходной зоной после 18:00 и заполняется музыкой, огнями и развлечениями.",
+                source: "Совет туристу"
+            },
+            {
+                fact: "Таиланд является крупнейшим в мире производителем натурального каучука.",
+                source: "Экономический факт"
+            },
+            {
+                fact: "На Пхукете есть собственный международный аэропорт, который принимает рейсы со всего мира, что делает остров легко доступным для туристов.",
+                source: "Транспорт"
+            },
+            {
+                fact: "Тайцы считают голову самой священной частью тела, а ноги — самой грязной. Поэтому прикасаться к голове тайца считается крайне неуважительным жестом.",
+                source: "Культурный этикет"
+            },
+            {
+                fact: "Пляж Патонг имеет пологий вход в воду, что делает его безопасным для купания детей и тех, кто плохо плавает.",
+                source: "Совет туристу"
+            },
+            {
+                fact: "В Таиланде проживает около 10% всех видов животных планеты, включая слонов, тигров, обезьян и множество экзотических птиц.",
+                source: "Фауна"
+            },
+            {
+                fact: "На Пхукете проходит один из самых известных в Азии вегетарианских фестивалей, во время которого участники совершают экстремальные ритуалы, например, ходят по раскаленным углям.",
+                source: "Культурный фестиваль"
+            },
+            {
+                fact: "Тайская улыбка — не просто выражение эмоций. У тайцев существует 13 различных типов улыбок, которые используются в разных ситуациях.",
+                source: "Культурный факт"
+            },
+            {
+                fact: "Патонг — отличное место для шопинга. Кроме многочисленных магазинов, здесь есть ночной рынок и торговый центр Jungceylon.",
+                source: "Совет туристу"
+            },
+            {
+                fact: "Бангкок, столица Таиланда, является самым посещаемым городом в мире с 2018 года.",
+                source: "Туристическая статистика"
+            },
+            {
+                fact: "На Пхукете можно посетить острова Пхи-Пхи, которые стали знамениты после фильма 'Пляж' с Леонардо ДиКаприо.",
+                source: "Достопримечательности"
+            },
+            {
+                fact: "Тайский язык тональный — одно и то же слово, произнесенное с разной интонацией, может иметь до пяти различных значений.",
+                source: "Лингвистический факт"
+            },
+            {
+                fact: "Лучшее время для посещения Пхукета — с ноября по апрель, когда стоит сухая погода с температурой около 30°C.",
+                source: "Климатический совет"
+            }
+        ];
+        
+        // Дата вылета (03.04.2026)
+        const departureDate = new Date('2026-04-03T00:00:00');
+        let secondsToUpdate = 60;
+        
+        // Обновление текущей даты в футере
+        function updateCurrentDate() {
+            const now = new Date();
+            const options = { 
+                day: '2-digit', 
+                month: '2-digit', 
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            const formattedDate = now.toLocaleDateString('ru-RU', options);
+            document.getElementById('current-date').textContent = formattedDate;
             
-            let messageIndex = 0;
-            button.disabled = true;
-            button.style.opacity = '0.7';
-            
-            const interval = setInterval(() => {
-                if (messageIndex < messages.length) {
-                    button.textContent = messages[messageIndex];
-                    messageIndex++;
-                } else {
-                    clearInterval(interval);
-                    button.textContent = '✓ Подключено! 🇦🇲';
-                    button.style.background = 'linear-gradient(45deg, #F2A800, #0033A0)';
-                    button.style.opacity = '1';
-                    
-                    setTimeout(() => {
-                        button.textContent = originalText;
-                        button.style.background = 'linear-gradient(45deg, #D90012, #F2A800)';
-                        button.disabled = false;
-                    }, 2000);
-                }
-            }, 600);
+            // Обновление счетчика до следующего обновления
+            secondsToUpdate--;
+            if (secondsToUpdate <= 0) secondsToUpdate = 60;
+            document.getElementById('next-update').textContent = secondsToUpdate;
         }
-
-        // Предотвращаем скролл на мобильных
-        document.addEventListener('touchmove', function(e) {
-            e.preventDefault();
-        }, { passive: false });
-
-        document.addEventListener('wheel', function(e) {
-            e.preventDefault();
-        }, { passive: false });
+        
+        // Обновление счетчика
+        function updateCountdown() {
+            const now = new Date();
+            const timeDifference = departureDate - now;
+            
+            // Если дата уже наступила
+            if (timeDifference <= 0) {
+                document.getElementById('days').textContent = '0';
+                document.getElementById('hours').textContent = '0';
+                document.getElementById('minutes').textContent = '0';
+                document.getElementById('seconds').textContent = '0';
+                
+                document.querySelector('.countdown-title').innerHTML = '<i class="fas fa-glass-cheers"></i> Ура! Мы на Пхукете!';
+                
+                // Добавляем праздничную анимацию
+                document.querySelectorAll('.countdown-item').forEach(item => {
+                    item.style.background = 'linear-gradient(135deg, #4caf50, #2e7d32)';
+                    item.classList.add('pulse');
+                });
+                
+                return;
+            }
+            
+            // Расчет дней, часов, минут и секунд
+            const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+            
+            // Обновление элементов счетчика
+            document.getElementById('days').textContent = days.toString().padStart(2, '0');
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            
+            // Расчет текущего дня для показа факта (считаем от сегодняшнего дня)
+            const startDate = new Date('2026-02-10'); // Сегодняшняя дата
+            const currentDay = Math.floor((now - startDate) / (1000 * 60 * 60 * 24)) + 1;
+            
+            // Если день больше количества фактов, начинаем сначала
+            const dayIndex = Math.min(currentDay - 1, thaiFacts.length - 1);
+            
+            // Обновление факта
+            document.getElementById('fact-text').textContent = thaiFacts[dayIndex].fact;
+            document.getElementById('fact-source').textContent = `Источник: ${thaiFacts[dayIndex].source}`;
+            document.getElementById('current-day').textContent = currentDay;
+            
+            // Анимация при смене секунд
+            if (seconds === 59) {
+                document.getElementById('seconds').classList.add('pulse');
+                setTimeout(() => {
+                    document.getElementById('seconds').classList.remove('pulse');
+                }, 1000);
+            }
+        }
+        
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCurrentDate();
+            updateCountdown();
+            
+            // Обновление каждую секунду
+            setInterval(updateCountdown, 1000);
+            
+            // Обновление текущей даты каждую секунду
+            setInterval(updateCurrentDate, 1000);
+            
+            // Добавляем случайные эффекты при наведении на элементы пляжа
+            const beachElements = document.querySelectorAll('.palm-1, .palm-2, .seashell, .seashell-2');
+            beachElements.forEach(el => {
+                el.addEventListener('mouseenter', function() {
+                    this.style.transform = this.style.transform + ' scale(1.2)';
+                });
+                
+                el.addEventListener('mouseleave', function() {
+                    this.style.transform = this.style.transform.replace(' scale(1.2)', '');
+                });
+            });
+        });
     </script>
 </body>
 </html>
