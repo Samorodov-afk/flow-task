@@ -1,623 +1,599 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>До Пхукета</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #1a2980 0%, #26d0ce 100%);
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            overflow: hidden;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 500px;
-            background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(15px);
-            border-radius: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            padding: 25px 20px;
-            text-align: center;
-        }
-        
-        .header {
-            margin-bottom: 25px;
-        }
-        
-        h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            background: linear-gradient(45deg, #fff, #ffeb3b);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        
-        .subtitle {
-            font-size: 1rem;
-            opacity: 0.9;
-            margin-bottom: 12px;
-        }
-        
-        .destination {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 15px;
-        }
-        
-        .destination span {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            backdrop-filter: blur(5px);
-        }
-        
-        .days-container {
-            margin: 30px 0;
-            padding: 25px 15px;
-            background: rgba(0, 0, 0, 0.25);
-            border-radius: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .days-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, #ff9800, #ff5722);
-        }
-        
-        .days-label {
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            color: #ffeb3b;
-        }
-        
-        .days-number {
-            font-size: 4.5rem;
-            font-weight: 900;
-            line-height: 1;
-            text-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
-            background: linear-gradient(to bottom, #fff, #e1f5fe);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 8px;
-        }
-        
-        .days-text {
-            font-size: 1.3rem;
-            font-weight: 600;
-            opacity: 0.9;
-        }
-        
-        .content-container {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin-top: 25px;
-        }
-        
-        .fact-box, .word-box {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 20px;
-            text-align: left;
-            position: relative;
-        }
-        
-        .fact-box {
-            border-left: 4px solid #ff9800;
-        }
-        
-        .word-box {
-            border-left: 4px solid #4CAF50;
-        }
-        
-        .box-title {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-            font-size: 1.1rem;
-            color: #ffeb3b;
-        }
-        
-        .word-box .box-title {
-            color: #4CAF50;
-        }
-        
-        .fact-content, .word-content {
-            font-size: 1rem;
-            line-height: 1.4;
-            opacity: 0.95;
-        }
-        
-        .word-item {
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .word-item:last-child {
-            margin-bottom: 0;
-            padding-bottom: 0;
-            border-bottom: none;
-        }
-        
-        .russian {
-            font-weight: 600;
-            color: #ffeb3b;
-            margin-bottom: 4px;
-        }
-        
-        .thai {
-            font-size: 1.3rem;
-            color: white;
-            margin-bottom: 4px;
-            letter-spacing: 1px;
-        }
-        
-        .pronunciation {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            font-style: italic;
-        }
-        
-        .day-indicator {
-            position: absolute;
-            top: -10px;
-            right: 15px;
-            background: linear-gradient(45deg, #ff4081, #ff9800);
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            box-shadow: 0 5px 15px rgba(255, 64, 129, 0.3);
-        }
-        
-        .footer {
-            margin-top: 20px;
-            font-size: 0.8rem;
-            opacity: 0.8;
-            text-align: center;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        /* Анимации */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        /* Декоративные элементы */
-        .beach-icon {
-            font-size: 1.5rem;
-            margin: 12px 0;
-            color: #ffeb3b;
-        }
-        
-        /* Медиа-запросы для телефонов */
-        @media (max-height: 700px) {
-            .container {
-                padding: 20px 15px;
-                max-height: 95vh;
-                overflow-y: auto;
-            }
-            
-            h1 {
-                font-size: 1.8rem;
-            }
-            
-            .days-number {
-                font-size: 4rem;
-            }
-            
-            .fact-box, .word-box {
-                padding: 15px;
-            }
-            
-            .content-container {
-                gap: 12px;
-            }
-        }
-        
-        @media (max-height: 600px) {
-            .days-number {
-                font-size: 3.5rem;
-            }
-            
-            .days-container {
-                margin: 20px 0;
-                padding: 20px 12px;
-            }
-            
-            .fact-box, .word-box {
-                padding: 12px;
-            }
-            
-            .box-title {
-                font-size: 1rem;
-            }
-            
-            .fact-content, .word-content {
-                font-size: 0.95rem;
-            }
-        }
-        
-        @media (max-width: 400px) {
-            .destination {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .destination span {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .days-number {
-                font-size: 3.5rem;
-            }
-        }
-        
-        /* Стили для скролла */
-        .container::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-        .container::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-        }
-        
-        .container::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 3px;
-        }
-        
-        .container::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.4);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Опросник</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      background: linear-gradient(145deg, #e8ddd0 0%, #d9cdbe 100%);
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: -apple-system, 'Helvetica Neue', 'Segoe UI', Roboto, system-ui, sans-serif;
+      padding: 12px;
+      margin: 0;
+    }
+    .card {
+      background: #f8f4ee;
+      width: 100%;
+      max-width: 440px;
+      border-radius: 48px 48px 40px 40px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.10), 0 8px 20px rgba(0, 0, 0, 0.04);
+      padding: 28px 22px 32px;
+      border: 1px solid rgba(210, 190, 170, 0.4);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.2s;
+      backdrop-filter: blur(2px);
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      right: -20%;
+      width: 70%;
+      height: 70%;
+      background: radial-gradient(circle, rgba(200, 175, 150, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    /* Шаг 1: опросник */
+    #stepRole {
+      position: relative;
+      z-index: 2;
+    }
+    .poll-title {
+      font-size: 2rem;
+      font-weight: 300;
+      letter-spacing: 0.5px;
+      color: #4a3a2a;
+      text-align: center;
+      margin-bottom: 2px;
+      font-family: -apple-system, 'Helvetica Neue', sans-serif;
+    }
+    .poll-sub {
+      text-align: center;
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: #7a6a58;
+      margin-bottom: 28px;
+      letter-spacing: 0.8px;
+      border-bottom: 1px solid #e0d4c6;
+      padding-bottom: 18px;
+      background: transparent;
+      border-radius: 0;
+      padding: 8px 0 16px;
+      margin-top: 2px;
+    }
+    .role-selector {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .role-btn {
+      background: #f3ede6;
+      border: 1.5px solid #d5c8b8;
+      border-radius: 60px;
+      padding: 16px 20px;
+      font-size: 1.2rem;
+      font-weight: 450;
+      color: #4a3a2a;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      box-shadow: 0 2px 0 #cbbcaa;
+      letter-spacing: 0.3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      position: relative;
+      font-family: -apple-system, 'Helvetica Neue', sans-serif;
+    }
+    .role-btn .emoji {
+      font-size: 1.8rem;
+      line-height: 1;
+    }
+    .role-btn .check-mark {
+      opacity: 0;
+      font-size: 1.6rem;
+      transition: 0.15s;
+      margin-left: auto;
+      color: #b08864;
+    }
+    .role-btn.selected {
+      background: #f2e8dd;
+      border-color: #c8ad90;
+      box-shadow: 0 2px 0 #a8896a;
+      transform: scale(1.02);
+    }
+    .role-btn.selected .check-mark {
+      opacity: 1;
+    }
+    .role-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 0px 0 #cbbcaa;
+    }
+
+    .continue-wrap {
+      text-align: center;
+      margin: 4px 0 10px;
+    }
+    .btn-continue {
+      background: #d5c6b4;
+      border: none;
+      border-radius: 80px;
+      padding: 16px 32px;
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: #fcf9f4;
+      width: 100%;
+      max-width: 240px;
+      box-shadow: 0 3px 0 #b6a48e;
+      transition: all 0.1s ease;
+      cursor: pointer;
+      letter-spacing: 0.8px;
+      opacity: 0.3;
+      pointer-events: none;
+      transform: scale(0.97);
+      font-family: -apple-system, 'Helvetica Neue', sans-serif;
+    }
+    .btn-continue.active {
+      opacity: 1;
+      pointer-events: auto;
+      background: #dccbb8;
+      box-shadow: 0 3px 0 #b59c80;
+      transform: scale(1);
+    }
+    .btn-continue.active:active {
+      transform: translateY(3px);
+      box-shadow: 0 0px 0 #b59c80;
+    }
+
+    .hint-text {
+      font-size: 0.85rem;
+      font-weight: 350;
+      text-align: center;
+      color: #9a8a78;
+      margin-top: 6px;
+      letter-spacing: 0.4px;
+      font-family: -apple-system, 'Helvetica Neue', sans-serif;
+    }
+
+    /* Шаг 2: открытка */
+    .postcard {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+      padding-top: 4px;
+    }
+    .postcard.show {
+      display: flex;
+    }
+
+    .postcard-header {
+      font-size: 1rem;
+      font-weight: 350;
+      color: #7a6a58;
+      background: #f0e8de;
+      padding: 10px 20px;
+      border-radius: 40px;
+      letter-spacing: 1.2px;
+      border: 1px solid #dccfc0;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 14px;
+      box-shadow: inset 0 1px 4px rgba(255,255,255,0.6);
+      font-family: -apple-system, 'Helvetica Neue', sans-serif;
+    }
+
+    .scratch-card {
+      background: #e8dfd4;
+      border-radius: 40px;
+      padding: 18px 16px 16px;
+      width: 100%;
+      box-shadow: inset 0 -2px 0 #cdbfae, 0 12px 28px rgba(0,0,0,0.06);
+      margin: 0 0 14px;
+      position: relative;
+      min-height: 200px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .agree-box {
+      background: #f3ece2;
+      border-radius: 28px;
+      padding: 16px 14px 14px;
+      margin-bottom: 14px;
+      border: 1.5px solid #dccfc0;
+      box-shadow: inset 0 2px 6px rgba(255,255,255,0.5);
+      text-align: center;
+    }
+    .agree-box .rule-text {
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: #4f3f2f;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+      font-family: -apple-system, 'Helvetica Neue', sans-serif;
+    }
+    .agree-box .rule-text .phone-icon {
+      font-size: 1.4rem;
+    }
+    .agree-box .rule-text .highlight {
+      background: #e4d6c6;
+      padding: 0 10px;
+      border-radius: 30px;
+      font-weight: 500;
+      color: #3f2f1f;
+    }
+    .agree-check {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: #4f3f2f;
+      cursor: pointer;
+      font-family: -apple-system, 'Helvetica Neue', sans-serif;
+    }
+    .agree-check input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: #b08864;
+      transform: scale(1.05);
+      cursor: pointer;
+    }
+
+    .scratch-zone {
+      background: #d5c8b8;
+      background-image: repeating-linear-gradient(45deg, #ddd0be 0px, #ddd0be 4px, #cebfab 4px, #cebfab 8px);
+      border-radius: 32px;
+      padding: 24px 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.15s;
+      box-shadow: 0 4px 0 #b6a48e;
+      border: 1.5px solid #c8b8a4;
+      color: #f5ede2;
+      font-weight: 350;
+      font-size: 1.1rem;
+      letter-spacing: 0.8px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.10);
+      position: relative;
+      min-height: 140px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+      opacity: 0.5;
+      pointer-events: none;
+      font-family: -apple-system, 'Helvetica Neue', sans-serif;
+    }
+    .scratch-zone.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .scratch-zone:active {
+      transform: scale(0.97);
+      box-shadow: 0 2px 0 #b6a48e;
+    }
+    .scratch-zone .coin-icon {
+      font-size: 3.6rem;
+      display: block;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+      margin-bottom: 2px;
+      transition: 0.2s;
+    }
+    .scratch-zone .instruction {
+      font-size: 0.85rem;
+      opacity: 0.8;
+      background: rgba(0,0,0,0.08);
+      padding: 2px 16px;
+      border-radius: 40px;
+      font-weight: 300;
+    }
+
+    @keyframes spinCoin {
+      0% { transform: rotate(0deg) scale(1); }
+      25% { transform: rotate(180deg) scale(1.15); }
+      50% { transform: rotate(360deg) scale(0.92); }
+      75% { transform: rotate(540deg) scale(1.08); }
+      100% { transform: rotate(720deg) scale(1); }
+    }
+    .scratch-zone.spinning .coin-icon {
+      animation: spinCoin 0.8s ease-in-out 3;
+      animation-fill-mode: forwards;
+    }
+    .scratch-zone.spinning {
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    .reveal-content {
+      display: none;
+      background: #faf5ee;
+      border-radius: 32px;
+      padding: 28px 16px 24px;
+      text-align: center;
+      border: 2px solid #dfd0be;
+      box-shadow: inset 0 0 0 1px #fffcf5;
+      animation: softReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-content.show {
+      display: block;
+    }
+
+    @keyframes softReveal {
+      0% { opacity: 0; transform: scale(0.94) rotate(-0.8deg); }
+      100% { opacity: 1; transform: scale(1) rotate(0); }
+    }
+
+    .big-message {
+      font-size: 2.4rem;
+      font-weight: 400;
+      color: #3f2f1f;
+      line-height: 1.2;
+      margin-bottom: 4px;
+      letter-spacing: -0.3px;
+      font-family: -apple-system, 'Helvetica Neue', sans-serif;
+    }
+    .big-message span {
+      background: #efe4d6;
+      padding: 0 14px;
+      border-radius: 60px;
+      display: inline-block;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+      font-weight: 400;
+    }
+    .sub-role {
+      font-size: 1.2rem;
+      font-weight: 350;
+      color: #5a4a38;
+      margin-top: 6px;
+      background: #e8dccf;
+      padding: 6px 20px;
+      border-radius: 60px;
+      display: inline-block;
+      font-family: -apple-system, 'Helvetica Neue', sans-serif;
+    }
+    .call-rule {
+      background: #e8dccf;
+      border-radius: 60px;
+      padding: 12px 16px;
+      margin-top: 16px;
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: #3f2f1f;
+      border-left: 5px solid #c6ad90;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      font-family: -apple-system, 'Helvetica Neue', sans-serif;
+    }
+    .call-rule .icon-phone {
+      font-size: 1.6rem;
+    }
+
+    .reset-btn {
+      background: #ede4d8;
+      border: 1.5px solid #d5c8b8;
+      border-radius: 60px;
+      padding: 10px 26px;
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: #4a3a2a;
+      margin-top: 12px;
+      cursor: pointer;
+      transition: 0.1s;
+      box-shadow: 0 2px 0 #cbbcaa;
+      align-self: center;
+      font-family: -apple-system, 'Helvetica Neue', sans-serif;
+    }
+    .reset-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 0px 0 #cbbcaa;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 20px 16px 24px; border-radius: 36px; }
+      .poll-title { font-size: 1.7rem; }
+      .role-btn { padding: 14px 16px; font-size: 1.05rem; }
+      .btn-continue { font-size: 1.15rem; padding: 14px 20px; }
+      .big-message { font-size: 2rem; }
+      .scratch-zone { min-height: 120px; padding: 18px 10px; }
+      .scratch-zone .coin-icon { font-size: 3rem; }
+      .agree-box .rule-text { font-size: 0.8rem; }
+    }
+    @media (max-width: 380px) {
+      .role-btn { font-size: 0.95rem; padding: 12px 10px; }
+      .big-message { font-size: 1.7rem; }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1><i class="fas fa-umbrella-beach"></i> До Пхукета</h1>
-            <p class="subtitle">Отсчет до пляжа Патонг</p>
-            
-            <div class="beach-icon">
-                <i class="fas fa-sun"></i>
-            </div>
-            
-            <div class="destination">
-                <span><i class="fas fa-plane"></i> Вылет: 03.04.2026</span>
-                <span><i class="fas fa-map-marker-alt"></i> Пляж Патонг</span>
-            </div>
-        </div>
-        
-        <div class="days-container">
-            <div class="days-label">Осталось до отпуска:</div>
-            <div class="days-number pulse" id="days">0</div>
-            <div class="days-text">дней</div>
-        </div>
-        
-        <div class="content-container">
-            <div class="fact-box">
-                <div class="day-indicator">День <span id="current-day">1</span></div>
-                <div class="box-title">
-                    <i class="fas fa-lightbulb"></i>
-                    <span>Факт о Таиланде</span>
-                </div>
-                <div class="fact-content" id="fact-text">
-                    Загрузка интересного факта...
-                </div>
-            </div>
-            
-            <div class="word-box">
-                <div class="box-title">
-                    <i class="fas fa-language"></i>
-                    <span>Тайские слова на сегодня</span>
-                </div>
-                <div class="word-content" id="thai-words">
-                    <div class="word-item">
-                        <div class="russian">Здравствуйте</div>
-                        <div class="thai">สวัสดี</div>
-                        <div class="pronunciation">са-ва́т-ди</div>
-                    </div>
-                    <div class="word-item">
-                        <div class="russian">Спасибо</div>
-                        <div class="thai">ขอบคุณ</div>
-                        <div class="pronunciation">коп-кун</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <div>Сегодня: <span id="current-date">10.02.2026</span></div>
-            <div style="margin-top: 5px; font-size: 0.75rem;">Прибытие: 04.04.2026 • Пхукет, Таиланд</div>
-        </div>
+<div class="card" id="appCard">
+  <!-- ШАГ 1: Опросник -->
+  <div id="stepRole">
+    <div class="poll-title">Опросник</div>
+    <div class="poll-sub">выбери свою роль</div>
+    <div class="role-selector">
+      <div class="role-btn" data-role="бабушка">
+        <span class="emoji">👵</span> Бабушка
+        <span class="check-mark">✓</span>
+      </div>
+      <div class="role-btn" data-role="дедушка">
+        <span class="emoji">👴</span> Дедушка
+        <span class="check-mark">✓</span>
+      </div>
+      <div class="role-btn" data-role="тетя">
+        <span class="emoji">👩</span> Тётя
+        <span class="check-mark">✓</span>
+      </div>
     </div>
+    <div class="continue-wrap">
+      <button class="btn-continue" id="continueBtn">⟶ продолжить</button>
+    </div>
+    <div class="hint-text">нажми на свою роль</div>
+  </div>
 
-    <script>
-        // Факты о Таиланде
-        const thaiFacts = [
-            { fact: "Таиланд — единственная страна в Юго-Восточной Азии, которая никогда не была колонизирована европейскими державами." },
-            { fact: "Пхукет — самый большой остров Таиланда, его площадь составляет 576 км², что примерно сравнимо с размером Сингапура." },
-            { fact: "Пляж Патонг — самый известный и оживленный пляж Пхукета, протяженностью 3,5 км." },
-            { fact: "В Таиланде более 40 000 буддийских храмов, и около 95% населения исповедуют буддизм." },
-            { fact: "Тайская кухня считается одной из самых популярных в мире. Знаменитый суп Том Ям Кунг был признан лучшим супом в мире." },
-            { fact: "Пхукет когда-то был крупным центром добычи олова, что привлекло множество китайских иммигрантов." },
-            { fact: "В Таиланде существует более 1000 различных сортов манго, и сезон манго длится с марта по июнь." },
-            { fact: "На пляже Патонг вода обычно спокойная с ноября по апрель, что делает его идеальным для купания." },
-            { fact: "Тайский массаж является частью традиционной тайской медицины и насчитывает более 2500 лет истории." },
-            { fact: "Пхукет соединен с материком двумя мостами: Сарасин и Тхао Тхеп Красатри." },
-            { fact: "Пхукет знаменит своими закатами, особенно на западном побережье." },
-            { fact: "Тайский Новый год (Сонгкран) празднуется в апреле и известен как самый масштабный фестиваль воды." },
-            { fact: "Пляж Патонг получил свое название от деревни, которая когда-то здесь находилась. 'Патонг' означает 'банановый лес'." },
-            { fact: "На Пхукете находится самая большая статуя Будды на острове — Большой Будда Пхукета высотой 45 метров." },
-            { fact: "Ночная жизнь Патонга сосредоточена вокруг улицы Бангла-Роуд, которая становится пешеходной зоной после 18:00." },
-            { fact: "Пляж Патонг имеет пологий вход в воду, что делает его безопасным для купания детей." },
-            { fact: "На Пхукете проходит один из самых известных в Азии вегетарианских фестивалей." },
-            { fact: "Тайская улыбка — не просто выражение эмоций. У тайцев существует 13 различных типов улыбок." },
-            { fact: "Патонг — отличное место для шопинга с ночным рынком и торговым центром Jungceylon." },
-            { fact: "На Пхукете можно посетить острова Пхи-Пи, знаменитые после фильма 'Пляж' с Леонардо ДиКаприо." },
-            { fact: "Лучшее время для посещения Пхукета — с ноября по апрель, когда стоит сухая погода около 30°C." }
-        ];
-        
-        // Тайские слова для туристов (по 2 слова в день)
-        const thaiWords = [
-            [
-                { ru: "Здравствуйте", thai: "สวัสดี", pron: "са-ва́т-ди" },
-                { ru: "Спасибо", thai: "ขอบคุณ", pron: "коп-кун" }
-            ],
-            [
-                { ru: "Да", thai: "ใช่", pron: "чай" },
-                { ru: "Нет", thai: "ไม่ใช่", pron: "ма́й-чай" }
-            ],
-            [
-                { ru: "Пожалуйста", thai: "กรุณา", pron: "ка-ру-на́" },
-                { ru: "Извините", thai: "ขอโทษ", pron: "ко-то́т" }
-            ],
-            [
-                { ru: "Здоровья!", thai: "ขอให้สุขภาพแข็งแรง", pron: "ко хай суккапха́ кхэнг рэнг" },
-                { ru: "До свидания", thai: "ลาก่อน", pron: "ла́-кон" }
-            ],
-            [
-                { ru: "Как дела?", thai: "สบายดีไหม", pron: "са-бай-ди ма́й" },
-                { ru: "Хорошо", thai: "ดี", pron: "ди" }
-            ],
-            [
-                { ru: "Плохо", thai: "ไม่ดี", pron: "ма́й ди" },
-                { ru: "Не понимаю", thai: "ไม่เข้าใจ", pron: "ма́й као-джай" }
-            ],
-            [
-                { ru: "Сколько стоит?", thai: "เท่าไหร่", pron: "та́о-ра́й" },
-                { ru: "Дорого", thai: "แพง", pron: "пхэнг" }
-            ],
-            [
-                { ru: "Дешево", thai: "ถูก", pron: "ту̀к" },
-                { ru: "Торговаться", thai: "ต่อรองราคา", pron: "то-ронг ра-ка" }
-            ],
-            [
-                { ru: "Еда", thai: "อาหาร", pron: "а-ха́н" },
-                { ru: "Вода", thai: "น้ำ", pron: "на́м" }
-            ],
-            [
-                { ru: "Чек, пожалуйста", thai: "เช็คบิล", pron: "чек-бин" },
-                { ru: "Туалет", thai: "ห้องน้ำ", pron: "хонг на́м" }
-            ],
-            [
-                { ru: "Отель", thai: "โรงแรม", pron: "ронг-рэм" },
-                { ru: "Пляж", thai: "หาด", pron: "ха̀т" }
-            ],
-            [
-                { ru: "Море", thai: "ทะเล", pron: "та-ле" },
-                { ru: "Солнце", thai: "ดวงอาทิตย์", pron: "дуанг а-ти́т" }
-            ],
-            [
-                { ru: "Жарко", thai: "ร้อน", pron: "ро́н" },
-                { ru: "Холодно", thai: "หนาว", pron: "на́о" }
-            ],
-            [
-                { ru: "Вкусно", thai: "อร่อย", pron: "а-ро́й" },
-                { ru: "Остро", thai: "เผ็ด", pron: "пхэт" }
-            ],
-            [
-                { ru: "Рис", thai: "ข้าว", pron: "кха́о" },
-                { ru: "Лапша", thai: "ก๋วยเตี๋ยว", pron: "куай-тиао" }
-            ],
-            [
-                { ru: "Мясо", thai: "เนื้อ", pron: "ны́а" },
-                { ru: "Рыба", thai: "ปลา", pron: "пла" }
-            ],
-            [
-                { ru: "Фрукты", thai: "ผลไม้", pron: "пхон-ла-ма́й" },
-                { ru: "Кокос", thai: "มะพร้าว", pron: "ма-пра́о" }
-            ],
-            [
-                { ru: "Такси", thai: "แท็กซี่", pron: "тхэк-си" },
-                { ru: "Сколько до...?", thai: "ไป...ไกลไหม", pron: "пай... клай ма́й" }
-            ],
-            [
-                { ru: "Лево", thai: "ซ้าย", pron: "са́й" },
-                { ru: "Право", thai: "ขวา", pron: "кхва" }
-            ],
-            [
-                { ru: "Прямо", thai: "ตรง", pron: "тронг" },
-                { ru: "Здесь", thai: "ที่นี่", pron: "ти-ни́" }
-            ],
-            [
-                { ru: "Там", thai: "ที่นั่น", pron: "ти-на́н" },
-                { ru: "Магазин", thai: "ร้านค้า", pron: "ра́н-кха́" }
-            ],
-            [
-                { ru: "Рынок", thai: "ตลาด", pron: "та-ла́т" },
-                { ru: "Сувениры", thai: "ของที่ระลึก", pron: "кхонг ти ра-лык" }
-            ],
-            [
-                { ru: "Деньги", thai: "เงิน", pron: "нгэн" },
-                { ru: "Банк", thai: "ธนาคาร", pron: "та-на-кхан" }
-            ],
-            [
-                { ru: "Боль", thai: "เจ็บ", pron: "чеп" },
-                { ru: "Врач", thai: "หมอ", pron: "мор" }
-            ],
-            [
-                { ru: "Аптека", thai: "ร้านขายยา", pron: "ран кхай я" },
-                { ru: "Помогите", thai: "ช่วยด้วย", pron: "чуай дуай" }
-            ],
-            [
-                { ru: "Полиция", thai: "ตำรวจ", pron: "там-руат" },
-                { ru: "Опасность", thai: "อันตราย", pron: "ан-та-рай" }
-            ],
-            [
-                { ru: "Красиво", thai: "สวย", pron: "суай" },
-                { ru: "Храм", thai: "วัด", pron: "ват" }
-            ],
-            [
-                { ru: "Массаж", thai: "นวด", pron: "нуат" },
-                { ru: "Пляжный шезлонг", thai: "เก้าอี้ชายหาด", pron: "као-и чай-хат" }
-            ],
-            [
-                { ru: "Зонтик", thai: "ร่ม", pron: "ром" },
-                { ru: "Полотенце", thai: "ผ้าเช็ดตัว", pron: "пха чет туа" }
-            ],
-            [
-                { ru: "Купальник", thai: "ชุดว่ายน้ำ", pron: "чут вай нам" },
-                { ru: "Солнцезащитный крем", thai: "ครีมกันแดด", pron: "крим кан дэт" }
-            ]
-        ];
-        
-        // Дата вылета (03.04.2026)
-        const departureDate = new Date('2026-04-03T00:00:00');
-        
-        // Обновление текущей даты
-        function updateCurrentDate() {
-            const now = new Date();
-            const options = { 
-                day: '2-digit', 
-                month: '2-digit', 
-                year: 'numeric'
-            };
-            const formattedDate = now.toLocaleDateString('ru-RU', options);
-            document.getElementById('current-date').textContent = formattedDate;
-        }
-        
-        // Обновление счетчика
-        function updateCountdown() {
-            const now = new Date();
-            const timeDifference = departureDate - now;
-            
-            // Расчет дней
-            let days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-            
-            // Если дни отрицательные (отпуск уже начался)
-            if (days < 0) {
-                days = 0;
-                document.querySelector('.days-label').textContent = 'Мы на Пхукете!';
-                document.querySelector('.days-text').textContent = 'отпуск начался';
-                document.querySelector('.days-number').classList.add('pulse');
-            } else {
-                document.querySelector('.days-number').textContent = days;
-            }
-            
-            // Расчет текущего дня для показа факта и слов
-            const startDate = new Date('2026-02-10');
-            const currentDay = Math.floor((now - startDate) / (1000 * 60 * 60 * 24)) + 1;
-            
-            // Если день больше количества фактов/слов, начинаем сначала
-            const factIndex = (currentDay - 1) % thaiFacts.length;
-            const wordIndex = (currentDay - 1) % thaiWords.length;
-            
-            // Обновление факта
-            document.getElementById('fact-text').textContent = thaiFacts[factIndex].fact;
-            document.getElementById('current-day').textContent = currentDay;
-            
-            // Обновление тайских слов
-            const wordContainer = document.getElementById('thai-words');
-            wordContainer.innerHTML = '';
-            
-            thaiWords[wordIndex].forEach(word => {
-                const wordItem = document.createElement('div');
-                wordItem.className = 'word-item';
-                wordItem.innerHTML = `
-                    <div class="russian">${word.ru}</div>
-                    <div class="thai">${word.thai}</div>
-                    <div class="pronunciation">${word.pron}</div>
-                `;
-                wordContainer.appendChild(wordItem);
-            });
-        }
-        
-        // Инициализация при загрузке страницы
-        document.addEventListener('DOMContentLoaded', function() {
-            // Настраиваем высоту контейнера под экран
-            function adjustHeight() {
-                const container = document.querySelector('.container');
-                const windowHeight = window.innerHeight;
-                
-                if (windowHeight < 700) {
-                    container.style.maxHeight = (windowHeight - 40) + 'px';
-                    container.style.overflowY = 'auto';
-                } else {
-                    container.style.maxHeight = 'none';
-                    container.style.overflowY = 'visible';
-                }
-            }
-            
-            adjustHeight();
-            window.addEventListener('resize', adjustHeight);
-            
-            updateCurrentDate();
-            updateCountdown();
-            
-            // Обновление ежедневно в полночь
-            const now = new Date();
-            const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-            const timeToMidnight = tomorrow - now;
-            
-            setTimeout(function() {
-                updateCountdown();
-                setInterval(updateCountdown, 24 * 60 * 60 * 1000); // Каждые 24 часа
-            }, timeToMidnight);
-        });
-    </script>
+  <!-- ШАГ 2: открытка -->
+  <div id="stepPostcard" class="postcard">
+    <div class="postcard-header">коснись монетки</div>
+    <div class="scratch-card">
+      <div class="agree-box">
+        <div class="rule-text">
+          <span class="phone-icon">📞</span>
+          <span>Не пиши в чат! <span class="highlight">Только звонок</span></span>
+          <span style="font-size:1.2rem;">😉</span>
+        </div>
+        <label class="agree-check">
+          <input type="checkbox" id="agreeCheck"> <span>Соглашаюсь, звонить детям!</span>
+        </label>
+      </div>
+
+      <div class="scratch-zone" id="scratchZone">
+        <span class="coin-icon">🪙</span>
+        <span>потри монеткой</span>
+        <span class="instruction">(или пальцем)</span>
+      </div>
+
+      <div class="reveal-content" id="revealContent">
+        <div class="big-message">
+          <span id="roleBig">Поздравляем!</span>
+        </div>
+        <div class="sub-role" id="roleSub">ты снова станешь …</div>
+        <div class="call-rule">
+          <span class="icon-phone">📞</span>
+          <span><strong>Важно!</strong> без чатов — только звонок!</span>
+        </div>
+      </div>
+    </div>
+    <button class="reset-btn" id="resetBtn">⟲ начать заново</button>
+    <div style="font-size:0.75rem; font-weight:300; color:#9a8a78; margin-top:8px; text-align:center; font-family:-apple-system, 'Helvetica Neue', sans-serif;">
+      * поставь галочку, затем три монетку
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const roleBtns = document.querySelectorAll('.role-btn');
+    const continueBtn = document.getElementById('continueBtn');
+    const stepRole = document.getElementById('stepRole');
+    const stepPostcard = document.getElementById('stepPostcard');
+    const scratchZone = document.getElementById('scratchZone');
+    const revealContent = document.getElementById('revealContent');
+    const roleBig = document.getElementById('roleBig');
+    const roleSub = document.getElementById('roleSub');
+    const resetBtn = document.getElementById('resetBtn');
+    const agreeCheck = document.getElementById('agreeCheck');
+
+    let selectedRole = null;
+
+    roleBtns.forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        roleBtns.forEach(b => b.classList.remove('selected'));
+        this.classList.add('selected');
+        selectedRole = this.dataset.role;
+        continueBtn.classList.add('active');
+      });
+    });
+
+    continueBtn.addEventListener('click', function() {
+      if (!selectedRole) return;
+      stepRole.style.display = 'none';
+      stepPostcard.classList.add('show');
+
+      scratchZone.style.display = 'flex';
+      revealContent.classList.remove('show');
+      agreeCheck.checked = false;
+      scratchZone.classList.remove('active');
+      scratchZone.classList.remove('spinning');
+
+      let bigText = '';
+      let subText = '';
+      if (selectedRole === 'бабушка') {
+        bigText = '🎉 Бабушка!';
+        subText = 'ты снова станешь бабушкой ✨';
+      } else if (selectedRole === 'дедушка') {
+        bigText = '🎉 Дедушка!';
+        subText = 'ты снова станешь дедушкой ✨';
+      } else if (selectedRole === 'тетя') {
+        bigText = '🎉 Тётя!';
+        subText = 'ты снова станешь тётей ✨';
+      }
+      roleBig.innerHTML = `<span>${bigText}</span>`;
+      roleSub.textContent = subText;
+    });
+
+    agreeCheck.addEventListener('change', function() {
+      if (this.checked) {
+        scratchZone.classList.add('active');
+      } else {
+        scratchZone.classList.remove('active');
+      }
+    });
+
+    scratchZone.addEventListener('click', function(e) {
+      if (!agreeCheck.checked) {
+        this.style.transform = 'scale(0.95)';
+        setTimeout(() => { this.style.transform = ''; }, 150);
+        return;
+      }
+
+      this.classList.add('spinning');
+
+      setTimeout(() => {
+        this.style.display = 'none';
+        revealContent.classList.add('show');
+        if (navigator.vibrate) navigator.vibrate(20);
+      }, 3000);
+    });
+
+    resetBtn.addEventListener('click', function() {
+      stepRole.style.display = 'block';
+      stepPostcard.classList.remove('show');
+      roleBtns.forEach(b => b.classList.remove('selected'));
+      continueBtn.classList.remove('active');
+      selectedRole = null;
+      scratchZone.style.display = 'flex';
+      revealContent.classList.remove('show');
+      agreeCheck.checked = false;
+      scratchZone.classList.remove('active');
+      scratchZone.classList.remove('spinning');
+      roleBig.innerHTML = `<span>Поздравляем!</span>`;
+      roleSub.textContent = 'ты снова станешь …';
+    });
+  })();
+</script>
 </body>
 </html>
